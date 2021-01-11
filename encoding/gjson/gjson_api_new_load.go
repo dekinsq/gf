@@ -1,8 +1,8 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gjson
 
@@ -12,16 +12,16 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/gogf/gf/internal/json"
+	"github.com/dekinsq/gf/internal/json"
 
-	"github.com/gogf/gf/encoding/gini"
-	"github.com/gogf/gf/encoding/gtoml"
-	"github.com/gogf/gf/encoding/gxml"
-	"github.com/gogf/gf/encoding/gyaml"
-	"github.com/gogf/gf/internal/rwmutex"
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/text/gregex"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/encoding/gini"
+	"github.com/dekinsq/gf/encoding/gtoml"
+	"github.com/dekinsq/gf/encoding/gxml"
+	"github.com/dekinsq/gf/encoding/gyaml"
+	"github.com/dekinsq/gf/internal/rwmutex"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/text/gregex"
+	"github.com/dekinsq/gf/util/gconv"
 )
 
 // New creates a Json object with any variable type of <data>, but <data> should be a map

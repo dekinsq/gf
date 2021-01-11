@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gogf/gf/os/glog"
+	"github.com/dekinsq/gf/os/glog"
 )
 
 func main() {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/gogf/gf/os/glog"
+	"github.com/dekinsq/gf/os/glog"
 )
 
 func main() {

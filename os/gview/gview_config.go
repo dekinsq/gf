@@ -1,22 +1,22 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gview
 
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/i18n/gi18n"
-	"github.com/gogf/gf/internal/intlog"
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/glog"
-	"github.com/gogf/gf/os/gres"
-	"github.com/gogf/gf/os/gspath"
-	"github.com/gogf/gf/util/gconv"
-	"github.com/gogf/gf/util/gutil"
+	"github.com/dekinsq/gf/i18n/gi18n"
+	"github.com/dekinsq/gf/internal/intlog"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/os/glog"
+	"github.com/dekinsq/gf/os/gres"
+	"github.com/dekinsq/gf/os/gspath"
+	"github.com/dekinsq/gf/util/gconv"
+	"github.com/dekinsq/gf/util/gutil"
 )
 
 // Config is the configuration object for template engine.

@@ -1,8 +1,8 @@
-// Copyright 2020 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2020 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package guid provides simple and high performance unique id generation functionality.
 //
@@ -13,11 +13,11 @@
 package guid
 
 import (
-	"github.com/gogf/gf/container/gtype"
-	"github.com/gogf/gf/encoding/ghash"
-	"github.com/gogf/gf/net/gipv4"
-	"github.com/gogf/gf/util/gconv"
-	"github.com/gogf/gf/util/grand"
+	"github.com/dekinsq/gf/container/gtype"
+	"github.com/dekinsq/gf/encoding/ghash"
+	"github.com/dekinsq/gf/net/gipv4"
+	"github.com/dekinsq/gf/util/gconv"
+	"github.com/dekinsq/gf/util/grand"
 	"os"
 	"strconv"
 	"time"

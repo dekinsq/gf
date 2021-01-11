@@ -1,17 +1,17 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gdb
 
 import (
 	"fmt"
+	"github.com/dekinsq/gf/os/gcmd"
+	"github.com/dekinsq/gf/os/gtime"
+	"github.com/dekinsq/gf/test/gtest"
 	"github.com/go-sql-driver/mysql"
-	"github.com/gogf/gf/os/gcmd"
-	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/test/gtest"
 	"testing"
 )
 
@@ -291,7 +291,7 @@ CREATE TABLE %s (
 	})
 }
 
-// Fix issue: https://github.com/gogf/gf/issues/819
+// Fix issue: https://github.com/dekinsq/gf/issues/819
 func Test_Func_ConvertDataForTableRecord(t *testing.T) {
 	type Test struct {
 		ResetPasswordTokenAt mysql.NullTime `orm:"reset_password_token_at"`

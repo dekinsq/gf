@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/gogf/gf/encoding/gparser"
-	"github.com/gogf/gf/os/glog"
+	"github.com/dekinsq/gf/encoding/gparser"
+	"github.com/dekinsq/gf/os/glog"
 )
 
 func getWithPattern1() {

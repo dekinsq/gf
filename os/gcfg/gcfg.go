@@ -1,8 +1,8 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package gcfg provides reading, caching and managing for configuration.
 package gcfg
@@ -11,18 +11,18 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/text/gstr"
+	"github.com/dekinsq/gf/text/gstr"
 
-	"github.com/gogf/gf/os/gres"
+	"github.com/dekinsq/gf/os/gres"
 
-	"github.com/gogf/gf/container/garray"
-	"github.com/gogf/gf/container/gmap"
-	"github.com/gogf/gf/encoding/gjson"
-	"github.com/gogf/gf/internal/cmdenv"
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/gfsnotify"
-	"github.com/gogf/gf/os/glog"
-	"github.com/gogf/gf/os/gspath"
+	"github.com/dekinsq/gf/container/garray"
+	"github.com/dekinsq/gf/container/gmap"
+	"github.com/dekinsq/gf/encoding/gjson"
+	"github.com/dekinsq/gf/internal/cmdenv"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/os/gfsnotify"
+	"github.com/dekinsq/gf/os/glog"
+	"github.com/dekinsq/gf/os/gspath"
 )
 
 const (

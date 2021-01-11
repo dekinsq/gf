@@ -1,21 +1,21 @@
-// Copyright 2018-2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018-2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package gvar provides an universal variable type, like generics.
 package gvar
 
 import (
-	"github.com/gogf/gf/internal/json"
+	"github.com/dekinsq/gf/internal/json"
 	"time"
 
-	"github.com/gogf/gf/internal/empty"
+	"github.com/dekinsq/gf/internal/empty"
 
-	"github.com/gogf/gf/container/gtype"
-	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/container/gtype"
+	"github.com/dekinsq/gf/os/gtime"
+	"github.com/dekinsq/gf/util/gconv"
 )
 
 // Var is an universal variable type implementer.

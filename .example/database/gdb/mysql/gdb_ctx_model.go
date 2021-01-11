@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"github.com/gogf/gf/frame/g"
+	"github.com/dekinsq/gf/frame/g"
 )
 
 func main() {

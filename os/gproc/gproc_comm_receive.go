@@ -1,22 +1,22 @@
-// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gproc
 
 import (
 	"fmt"
-	"github.com/gogf/gf/internal/json"
+	"github.com/dekinsq/gf/internal/json"
 	"net"
 
-	"github.com/gogf/gf/container/gqueue"
-	"github.com/gogf/gf/container/gtype"
-	"github.com/gogf/gf/net/gtcp"
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/glog"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/container/gqueue"
+	"github.com/dekinsq/gf/container/gtype"
+	"github.com/dekinsq/gf/net/gtcp"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/os/glog"
+	"github.com/dekinsq/gf/util/gconv"
 )
 
 var (

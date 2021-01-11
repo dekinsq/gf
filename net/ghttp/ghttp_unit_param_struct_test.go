@@ -1,8 +1,8 @@
-// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package ghttp_test
 
@@ -11,11 +11,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/gogf/gf/util/gvalid"
+	"github.com/dekinsq/gf/util/gvalid"
 
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/test/gtest"
+	"github.com/dekinsq/gf/frame/g"
+	"github.com/dekinsq/gf/net/ghttp"
+	"github.com/dekinsq/gf/test/gtest"
 )
 
 func Test_Params_Parse(t *testing.T) {

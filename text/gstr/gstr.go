@@ -1,8 +1,8 @@
-// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package gstr provides functions for string handling.
 package gstr
@@ -16,11 +16,11 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/gogf/gf/internal/utils"
+	"github.com/dekinsq/gf/internal/utils"
 
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/util/gconv"
 
-	"github.com/gogf/gf/util/grand"
+	"github.com/dekinsq/gf/util/grand"
 )
 
 // Replace returns a copy of the string <origin>

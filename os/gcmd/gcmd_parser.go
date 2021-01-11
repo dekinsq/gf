@@ -1,25 +1,25 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 //
 
 package gcmd
 
 import (
 	"fmt"
-	"github.com/gogf/gf/internal/json"
+	"github.com/dekinsq/gf/internal/json"
 	"os"
 	"strings"
 
-	"github.com/gogf/gf/text/gstr"
+	"github.com/dekinsq/gf/text/gstr"
 
 	"errors"
 
-	"github.com/gogf/gf/container/gvar"
+	"github.com/dekinsq/gf/container/gvar"
 
-	"github.com/gogf/gf/text/gregex"
+	"github.com/dekinsq/gf/text/gregex"
 )
 
 // Parser for arguments.

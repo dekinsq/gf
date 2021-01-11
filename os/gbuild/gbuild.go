@@ -1,19 +1,19 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package gbuild manages the build-in variables from "gf build".
 package gbuild
 
 import (
-	"github.com/gogf/gf"
-	"github.com/gogf/gf/container/gvar"
-	"github.com/gogf/gf/encoding/gbase64"
-	"github.com/gogf/gf/internal/intlog"
-	"github.com/gogf/gf/internal/json"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf"
+	"github.com/dekinsq/gf/container/gvar"
+	"github.com/dekinsq/gf/encoding/gbase64"
+	"github.com/dekinsq/gf/internal/intlog"
+	"github.com/dekinsq/gf/internal/json"
+	"github.com/dekinsq/gf/util/gconv"
 	"runtime"
 )
 

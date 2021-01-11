@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gogf/gf/os/glog"
+	"github.com/dekinsq/gf/os/glog"
 )
 
 func main() {

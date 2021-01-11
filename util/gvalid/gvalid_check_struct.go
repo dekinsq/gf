@@ -1,16 +1,16 @@
-// Copyright 2017-2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017-2018 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gvalid
 
 import (
 	"strings"
 
-	"github.com/gogf/gf/internal/structs"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/internal/structs"
+	"github.com/dekinsq/gf/util/gconv"
 )
 
 var (

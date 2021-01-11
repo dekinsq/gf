@@ -1,29 +1,29 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gi18n_test
 
 import (
 	"testing"
 
-	"github.com/gogf/gf/os/gres"
+	"github.com/dekinsq/gf/os/gres"
 
-	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/os/gtime"
+	"github.com/dekinsq/gf/util/gconv"
 
-	"github.com/gogf/gf/frame/g"
+	"github.com/dekinsq/gf/frame/g"
 
-	"github.com/gogf/gf/i18n/gi18n"
+	"github.com/dekinsq/gf/i18n/gi18n"
 
-	"github.com/gogf/gf/debug/gdebug"
-	"github.com/gogf/gf/os/gfile"
+	"github.com/dekinsq/gf/debug/gdebug"
+	"github.com/dekinsq/gf/os/gfile"
 
-	"github.com/gogf/gf/test/gtest"
+	"github.com/dekinsq/gf/test/gtest"
 
-	_ "github.com/gogf/gf/os/gres/testdata/data"
+	_ "github.com/dekinsq/gf/os/gres/testdata/data"
 )
 
 func Test_Basic(t *testing.T) {

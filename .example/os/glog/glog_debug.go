@@ -3,9 +3,9 @@ package main
 import (
 	"time"
 
-	"github.com/gogf/gf/os/glog"
-	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/os/gtimer"
+	"github.com/dekinsq/gf/os/glog"
+	"github.com/dekinsq/gf/os/gtime"
+	"github.com/dekinsq/gf/os/gtimer"
 )
 
 func main() {

@@ -1,8 +1,8 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 // Package gmode provides release mode management for project.
 //
@@ -10,9 +10,9 @@
 package gmode
 
 import (
-	"github.com/gogf/gf/debug/gdebug"
-	"github.com/gogf/gf/internal/cmdenv"
-	"github.com/gogf/gf/os/gfile"
+	"github.com/dekinsq/gf/debug/gdebug"
+	"github.com/dekinsq/gf/internal/cmdenv"
+	"github.com/dekinsq/gf/os/gfile"
 )
 
 const (

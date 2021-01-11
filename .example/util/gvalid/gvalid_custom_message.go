@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/util/gvalid"
+	"github.com/dekinsq/gf/frame/g"
+	"github.com/dekinsq/gf/util/gvalid"
 )
 
 func main() {

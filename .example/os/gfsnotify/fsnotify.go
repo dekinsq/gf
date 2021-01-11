@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
+	"github.com/dekinsq/gf/os/glog"
 	"github.com/fsnotify/fsnotify"
-	"github.com/gogf/gf/os/glog"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	defer watch.Close()
 	//添加要监控的对象，文件或文件夹
 	//err = watch.Add("D:\\Workspace\\Go\\GOPATH\\src\\gitee.com\\johng\\gf\\geg\\other\\test.go")
-	err = watch.Add("/Users/john/Workspace/Go/GOPATH/src/github.com/gogf/gf/.example/other/test.go")
+	err = watch.Add("/Users/john/Workspace/Go/GOPATH/src/github.com/dekinsq/gf/.example/other/test.go")
 	if err != nil {
 		log.Fatal(err)
 	}

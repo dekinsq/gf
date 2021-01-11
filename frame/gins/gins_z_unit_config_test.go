@@ -1,23 +1,23 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gins_test
 
 import (
 	"fmt"
-	"github.com/gogf/gf/debug/gdebug"
-	"github.com/gogf/gf/frame/gins"
+	"github.com/dekinsq/gf/debug/gdebug"
+	"github.com/dekinsq/gf/frame/gins"
 	"testing"
 	"time"
 
-	"github.com/gogf/gf/os/gcfg"
+	"github.com/dekinsq/gf/os/gcfg"
 
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/test/gtest"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/os/gtime"
+	"github.com/dekinsq/gf/test/gtest"
 )
 
 var (

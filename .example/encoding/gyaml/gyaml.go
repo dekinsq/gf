@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gogf/gf/encoding/gyaml"
+	"github.com/dekinsq/gf/encoding/gyaml"
 )
 
 func main() {

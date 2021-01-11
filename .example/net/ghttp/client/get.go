@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gogf/gf/net/ghttp"
+	"github.com/dekinsq/gf/net/ghttp"
 )
 
 func main() {

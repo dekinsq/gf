@@ -1,30 +1,30 @@
-// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gi18n
 
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/internal/intlog"
+	"github.com/dekinsq/gf/internal/intlog"
 	"strings"
 	"sync"
 
-	"github.com/gogf/gf/os/glog"
+	"github.com/dekinsq/gf/os/glog"
 
-	"github.com/gogf/gf/os/gfsnotify"
+	"github.com/dekinsq/gf/os/gfsnotify"
 
-	"github.com/gogf/gf/text/gregex"
+	"github.com/dekinsq/gf/text/gregex"
 
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/util/gconv"
 
-	"github.com/gogf/gf/encoding/gjson"
+	"github.com/dekinsq/gf/encoding/gjson"
 
-	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/gres"
+	"github.com/dekinsq/gf/os/gfile"
+	"github.com/dekinsq/gf/os/gres"
 )
 
 // Manager, it is concurrent safe, supporting hot reload.
@@ -80,7 +80,7 @@ func DefaultOptions() Options {
 	)
 	if realPath != "" {
 		path = realPath
-		// To avoid of the source path of GF: github.com/gogf/i18n/gi18n
+		// To avoid of the source path of GF: github.com/dekinsq/i18n/gi18n
 		if gfile.Exists(path + gfile.Separator + "gi18n") {
 			path = ""
 		}

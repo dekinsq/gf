@@ -1,8 +1,8 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with l file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 //
 
 // Package glist provides most commonly used doubly linked list container which also supports concurrent-safe/unsafe switch feature.
@@ -11,10 +11,10 @@ package glist
 import (
 	"bytes"
 	"container/list"
-	"github.com/gogf/gf/internal/json"
-	"github.com/gogf/gf/util/gconv"
+	"github.com/dekinsq/gf/internal/json"
+	"github.com/dekinsq/gf/util/gconv"
 
-	"github.com/gogf/gf/internal/rwmutex"
+	"github.com/dekinsq/gf/internal/rwmutex"
 )
 
 type (

@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	"github.com/gogf/gf/encoding/gcompress"
-	"github.com/gogf/gf/os/gfile"
+	"github.com/dekinsq/gf/encoding/gcompress"
+	"github.com/dekinsq/gf/os/gfile"
 )
 
 func main() {

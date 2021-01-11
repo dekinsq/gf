@@ -1,19 +1,19 @@
-// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/dekinsq/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
-// You can obtain one at https://github.com/gogf/gf.
+// You can obtain one at https://github.com/dekinsq/gf.
 
 package gmvc
 
 import (
-	"github.com/gogf/gf/frame/gins"
+	"github.com/dekinsq/gf/frame/gins"
 	"sync"
 
-	"github.com/gogf/gf/util/gmode"
+	"github.com/dekinsq/gf/util/gmode"
 
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/os/gview"
+	"github.com/dekinsq/gf/net/ghttp"
+	"github.com/dekinsq/gf/os/gview"
 )
 
 // View is the view object for controller.

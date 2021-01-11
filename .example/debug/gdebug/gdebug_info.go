@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/gogf/gf/debug/gdebug"
+	"github.com/dekinsq/gf/debug/gdebug"
 )
 
 func main() {

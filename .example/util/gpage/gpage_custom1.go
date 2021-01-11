@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/os/gview"
-	"github.com/gogf/gf/text/gstr"
-	"github.com/gogf/gf/util/gpage"
+	"github.com/dekinsq/gf/frame/g"
+	"github.com/dekinsq/gf/net/ghttp"
+	"github.com/dekinsq/gf/os/gview"
+	"github.com/dekinsq/gf/text/gstr"
+	"github.com/dekinsq/gf/util/gpage"
 )
 
 // wrapContent wraps each of the page tag with html li and ul.

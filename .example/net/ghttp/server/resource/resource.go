@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/os/gres"
-	_ "github.com/gogf/gf/os/gres/testdata/data"
+	"github.com/dekinsq/gf/frame/g"
+	"github.com/dekinsq/gf/net/ghttp"
+	"github.com/dekinsq/gf/os/gres"
+	_ "github.com/dekinsq/gf/os/gres/testdata/data"
 )
 
 func main() {

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gogf/gf/database/gdb"
+	"github.com/dekinsq/gf/database/gdb"
 	"sync"
 	"time"
 )

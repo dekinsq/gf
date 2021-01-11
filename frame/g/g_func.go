@@ -52,12 +52,9 @@ func TryCatch(try func(), catch ...func(exception error)) {
 }
 
 // IsNil checks whether given <value> is nil.
-// Parameter <traceSource> is used for tracing to the source variable if given <value> is type
-// of a pinter that also points to a pointer. It returns nil if the source is nil when <traceSource>
-// is true.
 // Note that it might use reflect feature which affects performance a little bit.
-func IsNil(value interface{}, traceSource ...bool) bool {
-	return empty.IsNil(value, traceSource...)
+func IsNil(value interface{}) bool {
+	return empty.IsNil(value)
 }
 
 // IsEmpty checks whether given <value> empty.

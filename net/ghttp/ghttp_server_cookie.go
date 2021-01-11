@@ -13,19 +13,13 @@ import (
 
 // Cookie for HTTP COOKIE management.
 type Cookie struct {
-	data     map[string]*cookieItem // Underlying cookie items.
-	path     string                 // The default cookie path.
-	domain   string                 // The default cookie domain
-	maxAge   time.Duration          // The default cookie max age.
-	server   *Server                // Belonged HTTP server
-	request  *Request               // Belonged HTTP request.
-	response *Response              // Belonged HTTP response.
-}
-
-// cookieItem is the item stored in Cookie.
-type cookieItem struct {
-	*http.Cookie      // Underlying cookie items.
-	FromClient   bool // Mark this cookie received from client.
+	data     map[string]*http.Cookie // Underlying cookie items.
+	path     string                  // The default cookie path.
+	domain   string                  // The default cookie domain
+	maxAge   time.Duration           // The default cookie max age.
+	server   *Server                 // Belonged HTTP server
+	request  *Request                // Belonged HTTP request.
+	response *Response               // Belonged HTTP response.
 }
 
 // GetCookie creates or retrieves a cookie object with given request.
@@ -46,7 +40,7 @@ func (c *Cookie) init() {
 	if c.data != nil {
 		return
 	}
-	c.data = make(map[string]*cookieItem)
+	c.data = make(map[string]*http.Cookie)
 	c.path = c.request.Server.GetCookiePath()
 	c.domain = c.request.Server.GetCookieDomain()
 	c.maxAge = c.request.Server.GetCookieMaxAge()
@@ -56,10 +50,7 @@ func (c *Cookie) init() {
 	//	c.domain = c.request.GetHost()
 	//}
 	for _, v := range c.request.Cookies() {
-		c.data[v.Name] = &cookieItem{
-			Cookie:     v,
-			FromClient: true,
-		}
+		c.data[v.Name] = v
 	}
 }
 
@@ -98,27 +89,23 @@ func (c *Cookie) SetCookie(key, value, domain, path string, maxAge time.Duration
 	if len(httpOnly) > 0 {
 		isHttpOnly = httpOnly[0]
 	}
-	httpCookie := &http.Cookie{
+	c.data[key] = &http.Cookie{
 		Name:     key,
 		Value:    value,
 		Path:     path,
 		Domain:   domain,
+		Expires:  time.Now().Add(maxAge),
 		HttpOnly: isHttpOnly,
-	}
-	if maxAge != 0 {
-		httpCookie.Expires = time.Now().Add(maxAge)
-	}
-	c.data[key] = &cookieItem{
-		Cookie: httpCookie,
 	}
 }
 
 // SetHttpCookie sets cookie with *http.Cookie.
-func (c *Cookie) SetHttpCookie(httpCookie *http.Cookie) {
+func (c *Cookie) SetHttpCookie(cookie *http.Cookie) {
 	c.init()
-	c.data[httpCookie.Name] = &cookieItem{
-		Cookie: httpCookie,
+	if cookie.Expires.IsZero() {
+		cookie.Expires = time.Now().Add(c.maxAge)
 	}
+	c.data[cookie.Name] = cookie
 }
 
 // GetSessionId retrieves and returns the session id from cookie.
@@ -164,9 +151,11 @@ func (c *Cookie) Flush() {
 		return
 	}
 	for _, v := range c.data {
-		if v.FromClient {
+		// If cookie item is v.Expires.IsZero() means it is set in this request,
+		// which should be outputted to client.
+		if v.Expires.IsZero() {
 			continue
 		}
-		http.SetCookie(c.response.Writer, v.Cookie)
+		http.SetCookie(c.response.Writer, v)
 	}
 }

@@ -37,8 +37,8 @@ func Trim(str string, characterMask ...string) string {
 
 // TrimStr strips all of the given <cut> string from the beginning and end of a string.
 // Note that it does not strips the whitespaces of its beginning or end.
-func TrimStr(str string, cut string, count ...int) string {
-	return TrimLeftStr(TrimRightStr(str, cut, count...), cut, count...)
+func TrimStr(str string, cut string) string {
+	return TrimLeftStr(TrimRightStr(str, cut), cut)
 }
 
 // TrimLeft strips whitespace (or other characters) from the beginning of a string.
@@ -52,17 +52,10 @@ func TrimLeft(str string, characterMask ...string) string {
 
 // TrimLeftStr strips all of the given <cut> string from the beginning of a string.
 // Note that it does not strips the whitespaces of its beginning.
-func TrimLeftStr(str string, cut string, count ...int) string {
-	var (
-		lenCut   = len(cut)
-		cutCount = 0
-	)
+func TrimLeftStr(str string, cut string) string {
+	var lenCut = len(cut)
 	for len(str) >= lenCut && str[0:lenCut] == cut {
 		str = str[lenCut:]
-		cutCount++
-		if len(count) > 0 && count[0] != -1 && cutCount >= count[0] {
-			break
-		}
 	}
 	return str
 }
@@ -78,19 +71,13 @@ func TrimRight(str string, characterMask ...string) string {
 
 // TrimRightStr strips all of the given <cut> string from the end of a string.
 // Note that it does not strips the whitespaces of its end.
-func TrimRightStr(str string, cut string, count ...int) string {
-	var (
-		lenStr   = len(str)
-		lenCut   = len(cut)
-		cutCount = 0
-	)
+func TrimRightStr(str string, cut string) string {
+	var lenStr = len(str)
+	var lenCut = len(cut)
 	for lenStr >= lenCut && str[lenStr-lenCut:lenStr] == cut {
 		lenStr = lenStr - lenCut
 		str = str[:lenStr]
-		cutCount++
-		if len(count) > 0 && count[0] != -1 && cutCount >= count[0] {
-			break
-		}
+
 	}
 	return str
 }

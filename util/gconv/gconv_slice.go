@@ -26,7 +26,6 @@ func SliceStruct(params interface{}, pointer interface{}, mapping ...map[string]
 }
 
 // SliceStructDeep is alias of StructsDeep.
-// Deprecated, use SliceStruct instead.
 func SliceStructDeep(params interface{}, pointer interface{}, mapping ...map[string]string) (err error) {
 	return StructsDeep(params, pointer, mapping...)
 }

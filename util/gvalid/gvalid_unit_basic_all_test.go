@@ -7,7 +7,6 @@
 package gvalid_test
 
 import (
-	"github.com/gogf/gf/errors/gerror"
 	"testing"
 
 	"github.com/gogf/gf/frame/g"
@@ -24,9 +23,9 @@ func Test_Check(t *testing.T) {
 		err1 := gvalid.Check(val1, rule, nil)
 		err2 := gvalid.Check(val2, rule, nil)
 		err3 := gvalid.Check(val3, rule, nil)
-		t.Assert(err1, "invalid_rules: abc:6,16")
-		t.Assert(err2, "invalid_rules: abc:6,16")
-		t.Assert(err3, "invalid_rules: abc:6,16")
+		t.Assert(err1, "invalid rules: abc:6,16")
+		t.Assert(err2, "invalid rules: abc:6,16")
+		t.Assert(err3, "invalid rules: abc:6,16")
 	})
 }
 
@@ -238,22 +237,6 @@ func Test_Phone(t *testing.T) {
 	})
 }
 
-func Test_PhoneLoose(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		err1 := gvalid.Check("13333333333", "phone-loose", nil)
-		err2 := gvalid.Check("15555555555", "phone-loose", nil)
-		err3 := gvalid.Check("16666666666", "phone-loose", nil)
-		err4 := gvalid.Check("23333333333", "phone-loose", nil)
-		err5 := gvalid.Check("1333333333", "phone-loose", nil)
-		err6 := gvalid.Check("10333333333", "phone-loose", nil)
-		t.Assert(err1, nil)
-		t.Assert(err2, nil)
-		t.Assert(err3, nil)
-		t.AssertNE(err4, nil)
-		t.AssertNE(err5, nil)
-		t.AssertNE(err6, nil)
-	})
-}
 func Test_Telephone(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		rule := "telephone"
@@ -906,21 +889,5 @@ func Test_Regex2(t *testing.T) {
 
 		t.AssertNE(err1.Map()["required"], nil)
 		t.AssertNE(err2.Map()["min-length"], nil)
-	})
-}
-
-// issue: https://github.com/gogf/gf/issues/1077
-func Test_InternalError_String(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		type a struct {
-			Name string `v:"hh"`
-		}
-		aa := a{Name: "2"}
-		err := gvalid.CheckStruct(&aa, nil)
-
-		t.Assert(err.String(), "invalid_rules: hh")
-		t.Assert(err.Strings(), g.Slice{"invalid_rules: hh"})
-		t.Assert(err.FirstString(), "invalid_rules: hh")
-		t.Assert(gerror.Current(err), "invalid_rules: hh")
 	})
 }

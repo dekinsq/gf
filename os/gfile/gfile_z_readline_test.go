@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017-2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -8,7 +8,6 @@ package gfile_test
 
 import (
 	"github.com/gogf/gf/debug/gdebug"
-	"github.com/gogf/gf/errors/gerror"
 	"testing"
 
 	"github.com/gogf/gf/os/gfile"
@@ -18,8 +17,7 @@ import (
 func Test_NotFound(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		teatFile := gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/error.log"
-		callback := func(line string) error {
-			return nil
+		callback := func(line string) {
 		}
 		err := gfile.ReadLines(teatFile, callback)
 		t.AssertNE(err, nil)
@@ -28,60 +26,34 @@ func Test_NotFound(t *testing.T) {
 
 func Test_ReadLines(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		var (
-			expectList = []string{"a", "b", "c", "d", "e"}
-			getList    = make([]string, 0)
-			callback   = func(line string) error {
-				getList = append(getList, line)
-				return nil
-			}
-			teatFile = gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
-		)
+		expectList := []string{"a", "b", "c", "d", "e"}
+
+		getList := make([]string, 0)
+		callback := func(line string) {
+			getList = append(getList, line)
+		}
+
+		teatFile := gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
 		err := gfile.ReadLines(teatFile, callback)
+
 		t.AssertEQ(getList, expectList)
 		t.AssertEQ(err, nil)
 	})
 }
 
-func Test_ReadLines_Error(t *testing.T) {
+func Test_ReadByteLines(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		var (
-			callback = func(line string) error {
-				return gerror.New("custom error")
-			}
-			teatFile = gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
-		)
-		err := gfile.ReadLines(teatFile, callback)
-		t.AssertEQ(err.Error(), "custom error")
-	})
-}
+		expectList := [][]byte{[]byte("a"), []byte("b"), []byte("c"), []byte("d"), []byte("e")}
 
-func Test_ReadLinesBytes(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		var (
-			expectList = [][]byte{[]byte("a"), []byte("b"), []byte("c"), []byte("d"), []byte("e")}
-			getList    = make([][]byte, 0)
-			callback   = func(line []byte) error {
-				getList = append(getList, line)
-				return nil
-			}
-			teatFile = gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
-		)
-		err := gfile.ReadLinesBytes(teatFile, callback)
+		getList := make([][]byte, 0)
+		callback := func(line []byte) {
+			getList = append(getList, line)
+		}
+
+		teatFile := gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
+		err := gfile.ReadByteLines(teatFile, callback)
+
 		t.AssertEQ(getList, expectList)
 		t.AssertEQ(err, nil)
-	})
-}
-
-func Test_ReadLinesBytes_Error(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		var (
-			callback = func(line []byte) error {
-				return gerror.New("custom error")
-			}
-			teatFile = gfile.Dir(gdebug.CallerFilePath()) + gfile.Separator + "testdata/readline/file.log"
-		)
-		err := gfile.ReadLinesBytes(teatFile, callback)
-		t.AssertEQ(err.Error(), "custom error")
 	})
 }

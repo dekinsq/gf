@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -38,8 +38,8 @@ func (s *Server) routerMapKey(hook, method, path, domain string) string {
 // parsePattern parses the given pattern to domain, method and path variable.
 func (s *Server) parsePattern(pattern string) (domain, method, path string, err error) {
 	path = strings.TrimSpace(pattern)
-	domain = defaultDomainName
-	method = defaultMethod
+	domain = gDEFAULT_DOMAIN
+	method = gDEFAULT_METHOD
 	if array, err := gregex.MatchString(`([a-zA-Z]+):(.+)`, pattern); len(array) > 1 && err == nil {
 		path = strings.TrimSpace(array[2])
 		if v := strings.TrimSpace(array[1]); v != "" {
@@ -85,7 +85,7 @@ func (s *Server) setHandler(pattern string, handler *handlerItem) {
 	routerKey := s.routerMapKey(handler.hookName, method, uri, domain)
 	if !s.config.RouteOverWrite {
 		switch handler.itemType {
-		case handlerTypeHandler, handlerTypeObject, handlerTypeController:
+		case gHANDLER_TYPE_HANDLER, gHANDLER_TYPE_OBJECT, gHANDLER_TYPE_CONTROLLER:
 			if item, ok := s.routesMap[routerKey]; ok {
 				s.Logger().Fatalf(
 					`duplicated route registry "%s" at %s , already registered at %s`,
@@ -197,7 +197,7 @@ func (s *Server) setHandler(pattern string, handler *handlerItem) {
 		handler: handler,
 	}
 	switch handler.itemType {
-	case handlerTypeHandler, handlerTypeObject, handlerTypeController:
+	case gHANDLER_TYPE_HANDLER, gHANDLER_TYPE_OBJECT, gHANDLER_TYPE_CONTROLLER:
 		// Overwrite the route.
 		s.routesMap[routerKey] = []registeredRouteItem{routeItem}
 	default:
@@ -216,11 +216,11 @@ func (s *Server) setHandler(pattern string, handler *handlerItem) {
 // 3. Route type: {xxx} > :xxx > *xxx.
 func (s *Server) compareRouterPriority(newItem *handlerItem, oldItem *handlerItem) bool {
 	// If they're all type of middleware, the priority is according their registered sequence.
-	if newItem.itemType == handlerTypeMiddleware && oldItem.itemType == handlerTypeMiddleware {
+	if newItem.itemType == gHANDLER_TYPE_MIDDLEWARE && oldItem.itemType == gHANDLER_TYPE_MIDDLEWARE {
 		return false
 	}
 	// The middleware has the most high priority.
-	if newItem.itemType == handlerTypeMiddleware && oldItem.itemType != handlerTypeMiddleware {
+	if newItem.itemType == gHANDLER_TYPE_MIDDLEWARE && oldItem.itemType != gHANDLER_TYPE_MIDDLEWARE {
 		return true
 	}
 	// URI: The deeper the higher (simply check the count of char '/' in the URI).
@@ -312,18 +312,18 @@ func (s *Server) compareRouterPriority(newItem *handlerItem, oldItem *handlerIte
 
 	// It then compares the accuracy of their http method,
 	// the more accurate the more priority.
-	if newItem.router.Method != defaultMethod {
+	if newItem.router.Method != gDEFAULT_METHOD {
 		return true
 	}
-	if oldItem.router.Method != defaultMethod {
+	if oldItem.router.Method != gDEFAULT_METHOD {
 		return true
 	}
 
 	// If they have different router type,
 	// the new router item has more priority than the other one.
-	if newItem.itemType == handlerTypeHandler ||
-		newItem.itemType == handlerTypeObject ||
-		newItem.itemType == handlerTypeController {
+	if newItem.itemType == gHANDLER_TYPE_HANDLER ||
+		newItem.itemType == gHANDLER_TYPE_OBJECT ||
+		newItem.itemType == gHANDLER_TYPE_CONTROLLER {
 		return true
 	}
 

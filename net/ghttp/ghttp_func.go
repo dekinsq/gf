@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -69,23 +69,19 @@ func BuildParams(params interface{}, noUrlEncode ...bool) (encodedParamStr strin
 // niceCallFunc calls function <f> with exception capture logic.
 func niceCallFunc(f func()) {
 	defer func() {
-		if exception := recover(); exception != nil {
-			switch exception {
-			case exceptionExit, exceptionExitAll:
+		if e := recover(); e != nil {
+			switch e {
+			case gEXCEPTION_EXIT, gEXCEPTION_EXIT_ALL:
 				return
 			default:
-				if _, ok := exception.(errorStack); ok {
+				if _, ok := e.(gerror.ApiStack); ok {
 					// It's already an error that has stack info.
-					panic(exception)
+					panic(e)
 				} else {
 					// Create a new error with stack info.
 					// Note that there's a skip pointing the start stacktrace
 					// of the real error point.
-					if err, ok := exception.(error); ok {
-						panic(gerror.Wrap(err, ""))
-					} else {
-						panic(gerror.NewSkipf(1, "%v", exception))
-					}
+					panic(gerror.NewfSkip(1, "%v", e))
 				}
 			}
 		}

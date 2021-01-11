@@ -1,4 +1,4 @@
-// Copyright GoFrame gf Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -19,10 +19,18 @@ import (
 
 // Pool is an Object-Reusable Pool.
 type Pool struct {
-	list    *glist.List                 // Available/idle items list.
-	closed  *gtype.Bool                 // Whether the pool is closed.
-	TTL     time.Duration               // Time To Live for pool items.
-	NewFunc func() (interface{}, error) // Callback function to create pool item.
+	// Available/idle items list.
+	list *glist.List
+
+	// Whether the pool is closed.
+	closed *gtype.Bool
+
+	// Time To Live for pool items.
+	TTL time.Duration
+
+	// Callback function to create pool item.
+	NewFunc func() (interface{}, error)
+
 	// ExpireFunc is the for expired items destruction.
 	// This function needs to be defined when the pool items
 	// need to perform additional destruction operations.
@@ -32,8 +40,8 @@ type Pool struct {
 
 // Pool item.
 type poolItem struct {
-	value    interface{} // Item value.
-	expireAt int64       // Expire timestamp in milliseconds.
+	expire int64       // Expire timestamp in milliseconds.
+	value  interface{} // Item value.
 }
 
 // Creation function for object.
@@ -72,11 +80,11 @@ func (p *Pool) Put(value interface{}) error {
 		value: value,
 	}
 	if p.TTL == 0 {
-		item.expireAt = 0
+		item.expire = 0
 	} else {
 		// As for Golang version < 1.13, there's no method Milliseconds for time.Duration.
 		// So we need calculate the milliseconds using its nanoseconds value.
-		item.expireAt = gtime.TimestampMilli() + p.TTL.Nanoseconds()/1000000
+		item.expire = gtime.TimestampMilli() + p.TTL.Nanoseconds()/1000000
 	}
 	p.list.PushBack(item)
 	return nil
@@ -104,11 +112,8 @@ func (p *Pool) Get() (interface{}, error) {
 	for !p.closed.Val() {
 		if r := p.list.PopFront(); r != nil {
 			f := r.(*poolItem)
-			if f.expireAt == 0 || f.expireAt > gtime.TimestampMilli() {
+			if f.expire == 0 || f.expire > gtime.TimestampMilli() {
 				return f.value, nil
-			} else if p.ExpireFunc != nil {
-				// TODO: move expire function calling asynchronously from `Get` operation.
-				p.ExpireFunc(f.value)
 			}
 		} else {
 			break
@@ -164,9 +169,9 @@ func (p *Pool) checkExpireItems() {
 		}
 		if r := p.list.PopFront(); r != nil {
 			item := r.(*poolItem)
-			latestExpire = item.expireAt
+			latestExpire = item.expire
 			// TODO improve the auto-expiration mechanism of the pool.
-			if item.expireAt > timestampMilli {
+			if item.expire > timestampMilli {
 				p.list.PushFront(item)
 				break
 			}

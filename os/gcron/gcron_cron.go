@@ -30,7 +30,7 @@ type Cron struct {
 func New() *Cron {
 	return &Cron{
 		idGen:    gtype.NewInt64(),
-		status:   gtype.NewInt(StatusRunning),
+		status:   gtype.NewInt(STATUS_RUNNING),
 		entries:  gmap.NewStrAnyMap(true),
 		logPath:  gtype.NewString(),
 		logLevel: gtype.NewInt(glog.LEVEL_PROD),
@@ -162,7 +162,7 @@ func (c *Cron) Start(name ...string) {
 			}
 		}
 	} else {
-		c.status.Set(StatusReady)
+		c.status.Set(STATUS_READY)
 	}
 }
 
@@ -175,7 +175,7 @@ func (c *Cron) Stop(name ...string) {
 			}
 		}
 	} else {
-		c.status.Set(StatusStopped)
+		c.status.Set(STATUS_STOPPED)
 	}
 }
 
@@ -188,7 +188,7 @@ func (c *Cron) Remove(name string) {
 
 // Close stops and closes current cron.
 func (c *Cron) Close() {
-	c.status.Set(StatusClosed)
+	c.status.Set(STATUS_CLOSED)
 }
 
 // Size returns the size of the timed tasks.

@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -12,7 +12,7 @@ import (
 	"github.com/gogf/gf/text/gstr"
 )
 
-func Test_CaseCamel(t *testing.T) {
+func Test_CamelCase(t *testing.T) {
 	cases := [][]string{
 		{"test_case", "TestCase"},
 		{"test", "Test"},
@@ -28,14 +28,14 @@ func Test_CaseCamel(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseCamel(in)
+		result := gstr.CamelCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseCamelLower(t *testing.T) {
+func Test_CamelLowerCase(t *testing.T) {
 	cases := [][]string{
 		{"foo-bar", "fooBar"},
 		{"TestCase", "testCase"},
@@ -45,14 +45,14 @@ func Test_CaseCamelLower(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseCamelLower(in)
+		result := gstr.CamelLowerCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseSnake(t *testing.T) {
+func Test_SnakeCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "test_case"},
 		{"TestCase", "test_case"},
@@ -75,14 +75,14 @@ func Test_CaseSnake(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseSnake(in)
+		result := gstr.SnakeCase(in)
 		if result != out {
 			t.Error("'" + in + "'('" + result + "' != '" + out + "')")
 		}
 	}
 }
 
-func Test_CaseDelimited(t *testing.T) {
+func Test_DelimitedCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "test@case"},
 		{"TestCase", "test@case"},
@@ -106,28 +106,28 @@ func Test_CaseDelimited(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseDelimited(in, '@')
+		result := gstr.DelimitedCase(in, '@')
 		if result != out {
 			t.Error("'" + in + "' ('" + result + "' != '" + out + "')")
 		}
 	}
 }
 
-func Test_CaseSnakeScreaming(t *testing.T) {
+func Test_SnakeScreamingCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "TEST_CASE"},
 	}
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseSnakeScreaming(in)
+		result := gstr.SnakeScreamingCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseKebab(t *testing.T) {
+func Test_KebabCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "test-case"},
 		{"optimization1.0.0", "optimization-1-0-0"},
@@ -135,42 +135,42 @@ func Test_CaseKebab(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseKebab(in)
+		result := gstr.KebabCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseKebabScreaming(t *testing.T) {
+func Test_KebabScreamingCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "TEST-CASE"},
 	}
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseKebabScreaming(in)
+		result := gstr.KebabScreamingCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseDelimitedScreaming(t *testing.T) {
+func Test_DelimitedScreamingCase(t *testing.T) {
 	cases := [][]string{
 		{"testCase", "TEST.CASE"},
 	}
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseDelimitedScreaming(in, '.', true)
+		result := gstr.DelimitedScreamingCase(in, '.', true)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}
 	}
 }
 
-func Test_CaseSnakeFirstUpper(t *testing.T) {
+func TestSnakeFirstUpperCase(t *testing.T) {
 	cases := [][]string{
 		{"RGBCodeMd5", "rgb_code_md5"},
 		{"testCase", "test_case"},
@@ -186,7 +186,7 @@ func Test_CaseSnakeFirstUpper(t *testing.T) {
 	for _, i := range cases {
 		in := i[0]
 		out := i[1]
-		result := gstr.CaseSnakeFirstUpper(in)
+		result := gstr.SnakeFirstUpperCase(in)
 		if result != out {
 			t.Error("'" + result + "' != '" + out + "'")
 		}

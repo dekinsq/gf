@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -8,7 +8,6 @@ package gins
 
 import (
 	"fmt"
-	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/internal/intlog"
 	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gutil"
@@ -19,18 +18,18 @@ import (
 )
 
 const (
-	frameCoreComponentNameDatabase = "gf.core.component.database"
-	configNodeNameDatabase         = "database"
+	gFRAME_CORE_COMPONENT_NAME_DATABASE = "gf.core.component.database"
+	gDATABASE_NODE_NAME                 = "database"
 )
 
 // Database returns an instance of database ORM object
 // with specified configuration group name.
 func Database(name ...string) gdb.DB {
-	group := gdb.DefaultGroupName
+	group := gdb.DEFAULT_GROUP_NAME
 	if len(name) > 0 && name[0] != "" {
 		group = name[0]
 	}
-	instanceKey := fmt.Sprintf("%s.%s", frameCoreComponentNameDatabase, group)
+	instanceKey := fmt.Sprintf("%s.%s", gFRAME_CORE_COMPONENT_NAME_DATABASE, group)
 	db := instances.GetOrSetFuncLock(instanceKey, func() interface{} {
 		var (
 			configMap     map[string]interface{}
@@ -38,35 +37,14 @@ func Database(name ...string) gdb.DB {
 		)
 		// It firstly searches the configuration of the instance name.
 		if Config().Available() {
-			configNodeKey, _ = gutil.MapPossibleItemByKey(
-				Config().GetMap("."),
-				configNodeNameDatabase,
-			)
+			configNodeKey, _ = gutil.MapPossibleItemByKey(Config().GetMap("."), gDATABASE_NODE_NAME)
 			if configNodeKey == "" {
-				configNodeKey = configNodeNameDatabase
+				configNodeKey = gDATABASE_NODE_NAME
 			}
 			configMap = Config().GetMap(configNodeKey)
 		}
 		if len(configMap) == 0 && !gdb.IsConfigured() {
-			if !Config().Available() {
-				exampleFileName := "config.example.toml"
-				if Config().Available(exampleFileName) {
-					panic(gerror.Newf(
-						`configuration file "%s" not found, but found "%s", did you miss renaming the configuration example file?`,
-						Config().GetFileName(),
-						exampleFileName,
-					))
-				} else {
-					panic(gerror.Newf(
-						`configuration file "%s" not found, did you miss the configuration file or the file name setting?`,
-						Config().GetFileName(),
-					))
-				}
-			}
-			panic(gerror.Newf(
-				`database initialization failed: "%s" node not found, is configuration file or configuration node missing?`,
-				configNodeNameDatabase,
-			))
+			panic(fmt.Sprintf(`database init failed: "%s" node not found, is config file or configuration missing?`, gDATABASE_NODE_NAME))
 		}
 		if len(configMap) == 0 {
 			configMap = make(map[string]interface{})
@@ -106,11 +84,11 @@ func Database(name ...string) gdb.DB {
 
 			if len(cg) > 0 {
 				if gdb.GetConfig(group) == nil {
-					intlog.Printf("add configuration for group: %s, %#v", gdb.DefaultGroupName, cg)
-					gdb.SetConfigGroup(gdb.DefaultGroupName, cg)
+					intlog.Printf("add configuration for group: %s, %#v", gdb.DEFAULT_GROUP_NAME, cg)
+					gdb.SetConfigGroup(gdb.DEFAULT_GROUP_NAME, cg)
 				} else {
-					intlog.Printf("ignore configuration as it already exists for group: %s, %#v", gdb.DefaultGroupName, cg)
-					intlog.Printf("%s, %#v", gdb.DefaultGroupName, cg)
+					intlog.Printf("ignore configuration as it already exists for group: %s, %#v", gdb.DEFAULT_GROUP_NAME, cg)
+					intlog.Printf("%s, %#v", gdb.DEFAULT_GROUP_NAME, cg)
 				}
 			}
 		}
@@ -119,7 +97,7 @@ func Database(name ...string) gdb.DB {
 			if Config().Available() {
 				// Initialize logger for ORM.
 				var loggerConfigMap map[string]interface{}
-				loggerConfigMap = Config().GetMap(fmt.Sprintf("%s.%s", configNodeKey, configNodeNameLogger))
+				loggerConfigMap = Config().GetMap(fmt.Sprintf("%s.%s", configNodeKey, gLOGGER_NODE_NAME))
 				if len(loggerConfigMap) == 0 {
 					loggerConfigMap = Config().GetMap(configNodeKey)
 				}

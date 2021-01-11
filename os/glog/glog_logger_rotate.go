@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2020 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -25,6 +25,8 @@ func (l *Logger) rotateFileBySize(now time.Time) {
 	if l.config.RotateSize <= 0 {
 		return
 	}
+	l.rmu.Lock()
+	defer l.rmu.Unlock()
 	if err := l.doRotateFile(l.getFilePath(now)); err != nil {
 		// panic(err)
 		intlog.Error(err)
@@ -33,12 +35,6 @@ func (l *Logger) rotateFileBySize(now time.Time) {
 
 // doRotateFile rotates the given logging file.
 func (l *Logger) doRotateFile(filePath string) error {
-	memoryLockKey := "glog.doRotateFile:" + filePath
-	if !gmlock.TryLock(memoryLockKey) {
-		return nil
-	}
-	defer gmlock.Unlock(memoryLockKey)
-
 	// No backups, it then just removes the current logging file.
 	if l.config.RotateBackupLimit == 0 {
 		if err := gfile.Remove(filePath); err != nil {
@@ -74,8 +70,6 @@ func (l *Logger) doRotateFile(filePath string) error {
 		)
 		if !gfile.Exists(newFilePath) {
 			break
-		} else {
-			intlog.Printf(`rotation file exists, continue: %s`, newFilePath)
 		}
 	}
 	if err := gfile.Rename(filePath, newFilePath); err != nil {
@@ -97,11 +91,11 @@ func (l *Logger) rotateChecksTimely() {
 	}
 
 	// It here uses memory lock to guarantee the concurrent safety.
-	memoryLockKey := "glog.rotateChecksTimely:" + l.config.Path
-	if !gmlock.TryLock(memoryLockKey) {
+	lockKey := "glog.rotateChecksTimely:" + l.config.Path
+	if !gmlock.TryLock(lockKey) {
 		return
 	}
-	defer gmlock.Unlock(memoryLockKey)
+	defer gmlock.Unlock(lockKey)
 
 	var (
 		now      = time.Now()
@@ -110,7 +104,7 @@ func (l *Logger) rotateChecksTimely() {
 	)
 	intlog.Printf("logging rotation start checks: %+v", files)
 	// =============================================================
-	// Rotation of expired file checks.
+	// Rotation expire file checks.
 	// =============================================================
 	if l.config.RotateExpire > 0 {
 		var (
@@ -176,7 +170,7 @@ func (l *Logger) rotateChecksTimely() {
 	}
 
 	// =============================================================
-	// Backups count limitation and expiration checks.
+	// Backups count limit and expiration checks.
 	// =============================================================
 	var (
 		backupFilesMap          = make(map[string]*garray.SortedArray)

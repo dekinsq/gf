@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017-2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -7,8 +7,6 @@
 package genv_test
 
 import (
-	"github.com/gogf/gf/frame/g"
-	"github.com/gogf/gf/os/gcmd"
 	"os"
 	"testing"
 
@@ -65,17 +63,6 @@ func Test_GEnv_Set(t *testing.T) {
 	})
 }
 
-func Test_GEnv_SetMap(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		err := genv.SetMap(g.MapStrStr{
-			"K1": "TEST1",
-			"K2": "TEST2",
-		})
-		t.Assert(err, nil)
-		t.AssertEQ(os.Getenv("K1"), "TEST1")
-		t.AssertEQ(os.Getenv("K2"), "TEST2")
-	})
-}
 func Test_GEnv_Build(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		s := genv.Build(map[string]string{
@@ -96,18 +83,5 @@ func Test_GEnv_Remove(t *testing.T) {
 		err = genv.Remove(key)
 		t.Assert(err, nil)
 		t.AssertEQ(os.Getenv(key), "")
-	})
-}
-
-func Test_GetWithCmd(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		gcmd.Init("-test", "2")
-		t.Assert(genv.GetWithCmd("TEST"), 2)
-	})
-	gtest.C(t, func(t *gtest.T) {
-		genv.Set("TEST", "1")
-		defer genv.Remove("TEST")
-		gcmd.Init("-test", "2")
-		t.Assert(genv.GetWithCmd("test"), 1)
 	})
 }

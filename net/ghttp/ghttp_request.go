@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -97,7 +97,7 @@ func newRequest(s *Server, r *http.Request, w http.ResponseWriter) *Request {
 // It returns a new WebSocket object if success, or the error if failure.
 // Note that the request should be a websocket request, or it will surely fail upgrading.
 func (r *Request) WebSocket() (*WebSocket, error) {
-	if conn, err := wsUpGrader.Upgrade(r.Response.Writer, r.Request, nil); err == nil {
+	if conn, err := wsUpgrader.Upgrade(r.Response.Writer, r.Request, nil); err == nil {
 		return &WebSocket{
 			conn,
 		}, nil
@@ -108,18 +108,18 @@ func (r *Request) WebSocket() (*WebSocket, error) {
 
 // Exit exits executing of current HTTP handler.
 func (r *Request) Exit() {
-	panic(exceptionExit)
+	panic(gEXCEPTION_EXIT)
 }
 
 // ExitAll exits executing of current and following HTTP handlers.
 func (r *Request) ExitAll() {
 	r.exit = true
-	panic(exceptionExitAll)
+	panic(gEXCEPTION_EXIT_ALL)
 }
 
 // ExitHook exits executing of current and following HTTP HOOK handlers.
 func (r *Request) ExitHook() {
-	panic(exceptionExitHook)
+	panic(gEXCEPTION_EXIT_HOOK)
 }
 
 // IsExited checks and returns whether current request is exited.

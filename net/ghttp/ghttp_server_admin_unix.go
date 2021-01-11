@@ -1,4 +1,4 @@
-// Copyright 2017 gf Author(https://goframe.org). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -35,22 +35,14 @@ func handleProcessSignal() {
 		sig = <-procSignalChan
 		intlog.Printf(`signal received: %s`, sig.String())
 		switch sig {
-		// Shutdown the servers.
-		case syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL, syscall.SIGABRT:
+		// Stop the servers.
+		case syscall.SIGINT, syscall.SIGQUIT, syscall.SIGKILL, syscall.SIGTERM, syscall.SIGABRT:
 			shutdownWebServers(sig.String())
-			return
-
-		// Shutdown the servers gracefully.
-		// Especially from K8S when running server in POD.
-		case syscall.SIGTERM:
-			shutdownWebServersGracefully(sig.String())
 			return
 
 		// Restart the servers.
 		case syscall.SIGUSR1:
-			if err := restartWebServers(sig.String()); err != nil {
-				intlog.Error(err)
-			}
+			restartWebServers(sig.String())
 			return
 
 		default:

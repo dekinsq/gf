@@ -9,7 +9,7 @@
 package gcmd_test
 
 import (
-	"github.com/gogf/gf/os/genv"
+	"os"
 	"testing"
 
 	"github.com/gogf/gf/frame/g"
@@ -20,22 +20,16 @@ import (
 
 func Test_Default(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		gcmd.Init([]string{"gf", "--force", "remove", "-fq", "-p=www", "path", "-n", "root"}...)
-		t.Assert(len(gcmd.GetArgAll()), 2)
-		t.Assert(gcmd.GetArg(1), "path")
+		os.Args = []string{"gf", "--force", "remove", "-fq", "-p=www", "path", "-n", "root"}
+		t.Assert(len(gcmd.GetArgAll()), 4)
+		t.Assert(gcmd.GetArg(1), "remove")
 		t.Assert(gcmd.GetArg(100, "test"), "test")
-		t.Assert(gcmd.GetOpt("force"), "remove")
-		t.Assert(gcmd.GetOpt("n"), "root")
-		t.Assert(gcmd.ContainsOpt("fq"), true)
+		t.Assert(gcmd.GetOpt("n"), "")
 		t.Assert(gcmd.ContainsOpt("p"), true)
+		t.Assert(gcmd.ContainsOpt("n"), true)
 		t.Assert(gcmd.ContainsOpt("none"), false)
 		t.Assert(gcmd.GetOpt("none", "value"), "value")
-	})
-	gtest.C(t, func(t *gtest.T) {
-		gcmd.Init([]string{"gf", "gen", "-h"}...)
-		t.Assert(len(gcmd.GetArgAll()), 2)
-		t.Assert(gcmd.GetOpt("h"), "")
-		t.Assert(gcmd.ContainsOpt("h"), true)
+
 	})
 }
 
@@ -52,19 +46,5 @@ func Test_BuildOptions(t *testing.T) {
 			"n": "john",
 		}, "-test")
 		t.Assert(s, "-testn=john")
-	})
-}
-
-func Test_GetWithEnv(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		genv.Set("TEST", "1")
-		defer genv.Remove("TEST")
-		t.Assert(gcmd.GetWithEnv("test"), 1)
-	})
-	gtest.C(t, func(t *gtest.T) {
-		genv.Set("TEST", "1")
-		defer genv.Remove("TEST")
-		gcmd.Init("-test", "2")
-		t.Assert(gcmd.GetWithEnv("test"), 2)
 	})
 }

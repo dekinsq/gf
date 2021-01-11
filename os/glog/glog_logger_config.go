@@ -9,7 +9,6 @@ package glog
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/internal/intlog"
 	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/util/gconv"
@@ -45,7 +44,7 @@ type Config struct {
 // DefaultConfig returns the default configuration for logger.
 func DefaultConfig() Config {
 	c := Config{
-		File:                defaultFileFormat,
+		File:                gDEFAULT_FILE_FORMAT,
 		Flags:               F_TIME_STD,
 		Level:               LEVEL_ALL,
 		StStatus:            1,
@@ -192,7 +191,7 @@ func (l *Logger) SetPath(path string) error {
 	if !gfile.Exists(path) {
 		if err := gfile.Mkdir(path); err != nil {
 			//fmt.Fprintln(os.Stderr, fmt.Sprintf(`[glog] mkdir "%s" failed: %s`, path, err.Error()))
-			return gerror.Wrapf(err, `Mkdir "%s" failed in PWD "%s"`, path, gfile.Pwd())
+			return err
 		}
 	}
 	l.config.Path = strings.TrimRight(path, gfile.Separator)

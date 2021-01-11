@@ -9,7 +9,6 @@ package gsession
 import (
 	"fmt"
 	"github.com/gogf/gf/container/gmap"
-	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/internal/intlog"
 	"github.com/gogf/gf/internal/json"
 	"os"
@@ -56,7 +55,7 @@ func NewStorageFile(path ...string) *StorageFile {
 	}
 	if storagePath != "" {
 		if err := gfile.Mkdir(storagePath); err != nil {
-			panic(gerror.Wrapf(err, `Mkdir "%s" failed in PWD "%s"`, path, gfile.Pwd()))
+			panic(fmt.Sprintf("mkdir '%s' failed: %v", path[0], err))
 		}
 	}
 	s := &StorageFile{

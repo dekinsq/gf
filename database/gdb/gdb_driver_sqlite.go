@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -12,9 +12,10 @@ package gdb
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
-	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/internal/intlog"
+	"github.com/gogf/gf/os/gcache"
 	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/text/gstr"
 	"strings"
@@ -36,14 +37,15 @@ func (d *DriverSqlite) New(core *Core, node *ConfigNode) (DB, error) {
 // Open creates and returns a underlying sql.DB object for sqlite.
 func (d *DriverSqlite) Open(config *ConfigNode) (*sql.DB, error) {
 	var source string
+	var err error
 	if config.LinkInfo != "" {
 		source = config.LinkInfo
 	} else {
 		source = config.Name
 	}
-	// It searches the source file to locate its absolute path..
-	if absolutePath, _ := gfile.Search(source); absolutePath != "" {
-		source = absolutePath
+	source, err = gfile.Search(source)
+	if err != nil {
+		return nil, err
 	}
 	intlog.Printf("Open: %s", source)
 	if db, err := sql.Open("sqlite3", source); err == nil {
@@ -91,14 +93,14 @@ func (d *DriverSqlite) TableFields(table string, schema ...string) (fields map[s
 	charL, charR := d.GetChars()
 	table = gstr.Trim(table, charL+charR)
 	if gstr.Contains(table, " ") {
-		return nil, gerror.New("function TableFields supports only single table operations")
+		return nil, errors.New("function TableFields supports only single table operations")
 	}
 	checkSchema := d.DB.GetSchema()
 	if len(schema) > 0 && schema[0] != "" {
 		checkSchema = schema[0]
 	}
-	v, _ := internalCache.GetOrSetFunc(
-		fmt.Sprintf(`sqlite_table_fields_%s_%s@group:%s`, table, checkSchema, d.GetGroup()),
+	v, _ := gcache.GetOrSetFunc(
+		fmt.Sprintf(`sqlite_table_fields_%s_%s`, table, checkSchema),
 		func() (interface{}, error) {
 			var (
 				result Result

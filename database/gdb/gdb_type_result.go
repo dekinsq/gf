@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -224,16 +224,19 @@ func (r Result) Structs(pointer interface{}) (err error) {
 		itemKind    = itemType.Kind()
 	)
 	for i := 0; i < length; i++ {
-		var elem reflect.Value
 		if itemKind == reflect.Ptr {
-			elem = reflect.New(itemType.Elem())
+			e := reflect.New(itemType.Elem()).Elem()
+			if err = r[i].Struct(e); err != nil {
+				return fmt.Errorf(`slice element conversion failed: %s`, err.Error())
+			}
+			array.Index(i).Set(e.Addr())
 		} else {
-			elem = reflect.New(itemType).Elem()
+			e := reflect.New(itemType).Elem()
+			if err = r[i].Struct(e); err != nil {
+				return fmt.Errorf(`slice element conversion failed: %s`, err.Error())
+			}
+			array.Index(i).Set(e)
 		}
-		if err = r[i].Struct(elem); err != nil {
-			return fmt.Errorf(`slice element conversion failed: %s`, err.Error())
-		}
-		array.Index(i).Set(elem)
 	}
 	reflect.ValueOf(pointer).Elem().Set(array)
 	return nil

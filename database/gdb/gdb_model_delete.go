@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -9,9 +9,7 @@ package gdb
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/os/gtime"
-	"github.com/gogf/gf/text/gstr"
 )
 
 // Delete does "DELETE FROM ... " statement for the model.
@@ -28,7 +26,7 @@ func (m *Model) Delete(where ...interface{}) (result sql.Result, err error) {
 	}()
 	var (
 		fieldNameDelete                               = m.getSoftFieldNameDeleted()
-		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(false, false)
+		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(false)
 	)
 	// Soft deleting.
 	if !m.unscoped && fieldNameDelete != "" {
@@ -40,9 +38,5 @@ func (m *Model) Delete(where ...interface{}) (result sql.Result, err error) {
 			append([]interface{}{gtime.Now().String()}, conditionArgs...),
 		)
 	}
-	conditionStr := conditionWhere + conditionExtra
-	if !gstr.ContainsI(conditionStr, " WHERE ") {
-		return nil, gerror.New("there should be WHERE condition statement for DELETE operation")
-	}
-	return m.db.DoDelete(m.getLink(true), m.tables, conditionStr, conditionArgs...)
+	return m.db.DoDelete(m.getLink(true), m.tables, conditionWhere+conditionExtra, conditionArgs...)
 }

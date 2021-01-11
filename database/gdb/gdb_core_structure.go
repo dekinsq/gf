@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -7,6 +7,7 @@
 package gdb
 
 import (
+	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/util/gutil"
 	"strings"
 	"time"
@@ -21,9 +22,9 @@ import (
 	"github.com/gogf/gf/util/gconv"
 )
 
-// convertFieldValueToLocalValue automatically checks and converts field value from database type
+// convertValue automatically checks and converts field value from database type
 // to golang variable type.
-func (c *Core) convertFieldValueToLocalValue(fieldValue interface{}, fieldType string) interface{} {
+func (c *Core) convertValue(fieldValue interface{}, fieldType string) interface{} {
 	// If there's no type retrieved, it returns the <fieldValue> directly
 	// to use its original data type, as <fieldValue> is type of interface{}.
 	if fieldType == "" {
@@ -55,7 +56,6 @@ func (c *Core) convertFieldValueToLocalValue(fieldValue interface{}, fieldType s
 		return gconv.Int(gconv.String(fieldValue))
 
 	case
-		"int8", // For pgsql, int8 = bigint.
 		"big_int",
 		"bigint",
 		"bigserial":
@@ -146,8 +146,7 @@ func (c *Core) convertFieldValueToLocalValue(fieldValue interface{}, fieldType s
 	}
 }
 
-// mappingAndFilterData automatically mappings the map key to table field and removes
-// all key-value pairs that are not the field of given table.
+// filterFields removes all key-value pairs which are not the field of given table.
 func (c *Core) mappingAndFilterData(schema, table string, data map[string]interface{}, filter bool) (map[string]interface{}, error) {
 	if fieldsMap, err := c.DB.TableFields(table, schema); err == nil {
 		fieldsKeyMap := make(map[string]interface{}, len(fieldsMap))
@@ -162,11 +161,15 @@ func (c *Core) mappingAndFilterData(schema, table string, data map[string]interf
 				if foundKey != "" {
 					data[foundKey] = dataValue
 					delete(data, dataKey)
+				} else if !filter {
+					if schema != "" {
+						return nil, gerror.Newf(`no column of name "%s" found for table "%s" in schema "%s"`, dataKey, table, schema)
+					}
+					return nil, gerror.Newf(`no column of name "%s" found for table "%s"`, dataKey, table)
 				}
 			}
 		}
 		// Data filtering.
-		// It deletes all key-value pairs that has incorrect field name.
 		if filter {
 			for dataKey, _ := range data {
 				if _, ok := fieldsMap[dataKey]; !ok {

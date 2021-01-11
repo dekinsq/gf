@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -12,15 +12,13 @@ import "runtime"
 type stack []uintptr
 
 const (
-	// maxStackDepth marks the max stack depth for error back traces.
-	maxStackDepth = 32
+	gMAX_STACK_DEPTH = 32
 )
 
 // callers returns the stack callers.
-// Note that it here just retrieves the caller memory address array not the caller information.
 func callers(skip ...int) stack {
 	var (
-		pcs [maxStackDepth]uintptr
+		pcs [gMAX_STACK_DEPTH]uintptr
 		n   = 3
 	)
 	if len(skip) > 0 {

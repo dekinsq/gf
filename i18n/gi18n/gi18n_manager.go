@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -12,6 +12,8 @@ import (
 	"github.com/gogf/gf/internal/intlog"
 	"strings"
 	"sync"
+
+	"github.com/gogf/gf/os/glog"
 
 	"github.com/gogf/gf/os/gfsnotify"
 
@@ -233,11 +235,11 @@ func (m *Manager) init() {
 					m.data[lang] = make(map[string]string)
 				}
 				if j, err := gjson.LoadContent(file.Content()); err == nil {
-					for k, v := range j.Map() {
+					for k, v := range j.ToMap() {
 						m.data[lang][k] = gconv.String(v)
 					}
 				} else {
-					intlog.Errorf("load i18n file '%s' failed: %v", name, err)
+					glog.Errorf("load i18n file '%s' failed: %v", name, err)
 				}
 			}
 		}
@@ -268,11 +270,11 @@ func (m *Manager) init() {
 				m.data[lang] = make(map[string]string)
 			}
 			if j, err := gjson.LoadContent(gfile.GetBytes(file)); err == nil {
-				for k, v := range j.Map() {
+				for k, v := range j.ToMap() {
 					m.data[lang][k] = gconv.String(v)
 				}
 			} else {
-				intlog.Errorf("load i18n file '%s' failed: %v", file, err)
+				glog.Errorf("load i18n file '%s' failed: %v", file, err)
 			}
 		}
 		// Monitor changes of i18n files for hot reload feature.

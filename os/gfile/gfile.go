@@ -59,9 +59,10 @@ func init() {
 }
 
 // Mkdir creates directories recursively with given <path>.
-// The parameter <path> is suggested to be an absolute path instead of relative one.
+// The parameter <path> is suggested to be absolute path.
 func Mkdir(path string) error {
-	if err := os.MkdirAll(path, os.ModePerm); err != nil {
+	err := os.MkdirAll(path, os.ModePerm)
+	if err != nil {
 		return err
 	}
 	return nil

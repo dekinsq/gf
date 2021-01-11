@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -46,7 +46,7 @@ func (m *Model) doGetAll(limit1 bool, where ...interface{}) (Result, error) {
 	}
 	var (
 		softDeletingCondition                         = m.getConditionForSoftDeleting()
-		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(limit1, false)
+		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(limit1)
 	)
 	if !m.unscoped && softDeletingCondition != "" {
 		if conditionWhere == "" {
@@ -75,9 +75,6 @@ func (m *Model) doGetAll(limit1 bool, where ...interface{}) (Result, error) {
 func (m *Model) getFieldsFiltered() string {
 	if m.fieldsEx == "" {
 		// No filtering.
-		if !gstr.Contains(m.fields, ".") && !gstr.Contains(m.fields, " ") {
-			return m.db.QuoteString(m.fields)
-		}
 		return m.fields
 	}
 	var (
@@ -115,7 +112,7 @@ func (m *Model) getFieldsFiltered() string {
 		if len(newFields) > 0 {
 			newFields += ","
 		}
-		newFields += m.db.QuoteWord(k)
+		newFields += k
 	}
 	return newFields
 }
@@ -123,7 +120,7 @@ func (m *Model) getFieldsFiltered() string {
 // Chunk iterates the query result with given size and callback function.
 func (m *Model) Chunk(limit int, callback func(result Result, err error) bool) {
 	page := m.start
-	if page <= 0 {
+	if page == 0 {
 		page = 1
 	}
 	model := m
@@ -227,10 +224,10 @@ func (m *Model) Array(fieldsAndWhere ...interface{}) ([]Value, error) {
 //
 // Eg:
 // user := new(User)
-// err  := db.Model("user").Where("id", 1).Struct(user)
+// err  := db.Table("user").Where("id", 1).Struct(user)
 //
 // user := (*User)(nil)
-// err  := db.Model("user").Where("id", 1).Struct(&user)
+// err  := db.Table("user").Where("id", 1).Struct(&user)
 func (m *Model) Struct(pointer interface{}, where ...interface{}) error {
 	one, err := m.One(where...)
 	if err != nil {
@@ -251,10 +248,10 @@ func (m *Model) Struct(pointer interface{}, where ...interface{}) error {
 //
 // Eg:
 // users := ([]User)(nil)
-// err   := db.Model("user").Structs(&users)
+// err   := db.Table("user").Structs(&users)
 //
 // users := ([]*User)(nil)
-// err   := db.Model("user").Structs(&users)
+// err   := db.Table("user").Structs(&users)
 func (m *Model) Structs(pointer interface{}, where ...interface{}) error {
 	all, err := m.All(where...)
 	if err != nil {
@@ -275,16 +272,16 @@ func (m *Model) Structs(pointer interface{}, where ...interface{}) error {
 //
 // Eg:
 // user := new(User)
-// err  := db.Model("user").Where("id", 1).Scan(user)
+// err  := db.Table("user").Where("id", 1).Struct(user)
 //
 // user := (*User)(nil)
-// err  := db.Model("user").Where("id", 1).Scan(&user)
+// err  := db.Table("user").Where("id", 1).Struct(&user)
 //
 // users := ([]User)(nil)
-// err   := db.Model("user").Scan(&users)
+// err   := db.Table("user").Structs(&users)
 //
 // users := ([]*User)(nil)
-// err   := db.Model("user").Scan(&users)
+// err   := db.Table("user").Structs(&users)
 func (m *Model) Scan(pointer interface{}, where ...interface{}) error {
 	t := reflect.TypeOf(pointer)
 	k := t.Kind()
@@ -344,7 +341,7 @@ func (m *Model) Count(where ...interface{}) (int, error) {
 	}
 	var (
 		softDeletingCondition                         = m.getConditionForSoftDeleting()
-		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(false, true)
+		conditionWhere, conditionExtra, conditionArgs = m.formatCondition(false)
 	)
 	if !m.unscoped && softDeletingCondition != "" {
 		if conditionWhere == "" {

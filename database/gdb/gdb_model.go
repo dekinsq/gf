@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -7,7 +7,6 @@
 package gdb
 
 import (
-	"context"
 	"fmt"
 	"github.com/gogf/gf/text/gregex"
 	"time"
@@ -53,14 +52,13 @@ type whereHolder struct {
 }
 
 const (
-	OPTION_OMITEMPTY  = 1
-	OPTION_ALLOWEMPTY = 2
-
-	linkTypeMaster   = 1
-	linkTypeSlave    = 2
-	whereHolderWhere = 1
-	whereHolderAnd   = 2
-	whereHolderOr    = 3
+	gLINK_TYPE_MASTER   = 1
+	gLINK_TYPE_SLAVE    = 2
+	gWHERE_HOLDER_WHERE = 1
+	gWHERE_HOLDER_AND   = 2
+	gWHERE_HOLDER_OR    = 3
+	OPTION_OMITEMPTY    = 1 << iota
+	OPTION_ALLOWEMPTY
 )
 
 // Table creates and returns a new ORM model from given schema.
@@ -114,16 +112,6 @@ func (tx *TX) Model(table ...string) *Model {
 	return tx.Table(table...)
 }
 
-// Ctx sets the context for current operation.
-func (m *Model) Ctx(ctx context.Context) *Model {
-	if ctx == nil {
-		return m
-	}
-	model := m.getModel()
-	model.db = model.db.Ctx(ctx)
-	return model
-}
-
 // As sets an alias name for current table.
 func (m *Model) As(as string) *Model {
 	if m.tables != "" {
@@ -153,7 +141,6 @@ func (m *Model) DB(db DB) *Model {
 // TX sets/changes the transaction for current operation.
 func (m *Model) TX(tx *TX) *Model {
 	model := m.getModel()
-	model.db = tx.db
 	model.tx = tx
 	return model
 }
@@ -190,7 +177,7 @@ func (m *Model) Clone() *Model {
 // Master marks the following operation on master node.
 func (m *Model) Master() *Model {
 	model := m.getModel()
-	model.linkType = linkTypeMaster
+	model.linkType = gLINK_TYPE_MASTER
 	return model
 }
 
@@ -198,7 +185,7 @@ func (m *Model) Master() *Model {
 // Note that it makes sense only if there's any slave node configured.
 func (m *Model) Slave() *Model {
 	model := m.getModel()
-	model.linkType = linkTypeSlave
+	model.linkType = gLINK_TYPE_SLAVE
 	return model
 }
 
@@ -211,11 +198,4 @@ func (m *Model) Safe(safe ...bool) *Model {
 		m.safe = true
 	}
 	return m
-}
-
-// Args sets custom arguments for model operation.
-func (m *Model) Args(args ...interface{}) *Model {
-	model := m.getModel()
-	model.extraArgs = append(model.extraArgs, args)
-	return model
 }

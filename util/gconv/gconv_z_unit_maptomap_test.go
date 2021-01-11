@@ -138,6 +138,14 @@ func Test_MapToMapDeep(t *testing.T) {
 		err := gconv.MapToMap(params, &m)
 		t.Assert(err, nil)
 		t.Assert(len(m), 1)
+		t.Assert(m["key"].Id, 0)
+		t.Assert(m["key"].Name, "john")
+	})
+	gtest.C(t, func(t *gtest.T) {
+		m := (map[string]*User)(nil)
+		err := gconv.MapToMapDeep(params, &m)
+		t.Assert(err, nil)
+		t.Assert(len(m), 1)
 		t.Assert(m["key"].Id, 1)
 		t.Assert(m["key"].Name, "john")
 	})
@@ -247,7 +255,7 @@ func Test_MapToMaps2(t *testing.T) {
 	})
 }
 
-func Test_MapToMaps3(t *testing.T) {
+func Test_MapToMapsDeep(t *testing.T) {
 	type Ids struct {
 		Id  int
 		Uid int
@@ -275,6 +283,20 @@ func Test_MapToMaps3(t *testing.T) {
 		err := gconv.MapToMaps(params, &m)
 		t.Assert(err, nil)
 		t.Assert(len(m), 2)
+		t.Assert(m["100"][0].Id, 0)
+		t.Assert(m["100"][1].Id, 0)
+		t.Assert(m["100"][0].Name, "john")
+		t.Assert(m["100"][1].Name, "smith")
+		t.Assert(m["200"][0].Id, 0)
+		t.Assert(m["200"][1].Id, 0)
+		t.Assert(m["200"][0].Name, "green")
+		t.Assert(m["200"][1].Name, "jim")
+	})
+	gtest.C(t, func(t *gtest.T) {
+		m := make(map[string][]*User)
+		err := gconv.MapToMapsDeep(params, &m)
+		t.Assert(err, nil)
+		t.Assert(len(m), 2)
 		t.Assert(m["100"][0].Id, 1)
 		t.Assert(m["100"][1].Id, 2)
 		t.Assert(m["100"][0].Name, "john")
@@ -286,7 +308,7 @@ func Test_MapToMaps3(t *testing.T) {
 	})
 }
 
-func Test_MapToMapsWithTag(t *testing.T) {
+func Test_MapToMapsDeepWithTag(t *testing.T) {
 	type Ids struct {
 		Id  int
 		Uid int
@@ -312,6 +334,20 @@ func Test_MapToMapsWithTag(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
 		m := make(map[string][]*User)
 		err := gconv.MapToMaps(params, &m)
+		t.Assert(err, nil)
+		t.Assert(len(m), 2)
+		t.Assert(m["100"][0].Id, 0)
+		t.Assert(m["100"][1].Id, 0)
+		t.Assert(m["100"][0].Name, "john")
+		t.Assert(m["100"][1].Name, "smith")
+		t.Assert(m["200"][0].Id, 0)
+		t.Assert(m["200"][1].Id, 0)
+		t.Assert(m["200"][0].Name, "green")
+		t.Assert(m["200"][1].Name, "jim")
+	})
+	gtest.C(t, func(t *gtest.T) {
+		m := make(map[string][]*User)
+		err := gconv.MapToMapsDeep(params, &m)
 		t.Assert(err, nil)
 		t.Assert(len(m), 2)
 		t.Assert(m["100"][0].Id, 1)

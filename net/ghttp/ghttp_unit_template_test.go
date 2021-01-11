@@ -38,7 +38,7 @@ func Test_Template_Basic(t *testing.T) {
 		s.Start()
 		defer s.Shutdown()
 		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
+		client := ghttp.NewClient()
 		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
 
 		t.Assert(client.GetContent("/"), "Name:john")
@@ -64,7 +64,7 @@ func Test_Template_Encode(t *testing.T) {
 		s.Start()
 		defer s.Shutdown()
 		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
+		client := ghttp.NewClient()
 		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
 
 		t.Assert(client.GetContent("/"), "Name:john")
@@ -93,7 +93,7 @@ func Test_Template_Layout1(t *testing.T) {
 		s.Start()
 		defer s.Shutdown()
 		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
+		client := ghttp.NewClient()
 		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
 
 		t.Assert(client.GetContent("/"), "Not Found")
@@ -129,34 +129,13 @@ func Test_Template_Layout2(t *testing.T) {
 		s.Start()
 		defer s.Shutdown()
 		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
+		client := ghttp.NewClient()
 		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
 
 		t.Assert(client.GetContent("/"), "Not Found")
 		t.Assert(client.GetContent("/main1"), "a1b")
 		t.Assert(client.GetContent("/main2"), "a2b")
 		t.Assert(client.GetContent("/nil"), "ab")
-	})
-}
-
-func Test_Template_BuildInVarRequest(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		p, _ := ports.PopRand()
-		s := g.Server(p)
-		s.BindHandler("/:table/test", func(r *ghttp.Request) {
-			err := r.Response.WriteTplContent("{{.Request.table}}")
-			t.Assert(err, nil)
-		})
-		s.SetDumpRouterMap(false)
-		s.SetPort(p)
-		s.Start()
-		defer s.Shutdown()
-		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
-		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
-
-		t.Assert(client.GetContent("/user/test"), "user")
-		t.Assert(client.GetContent("/order/test"), "order")
 	})
 }
 
@@ -179,7 +158,7 @@ func Test_Template_XSS(t *testing.T) {
 		s.Start()
 		defer s.Shutdown()
 		time.Sleep(100 * time.Millisecond)
-		client := g.Client()
+		client := ghttp.NewClient()
 		client.SetPrefix(fmt.Sprintf("http://127.0.0.1:%d", p))
 
 		t.Assert(client.GetContent("/"), ghtml.Entities(c))

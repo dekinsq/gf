@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -20,13 +20,11 @@ func (w *wheel) start() {
 			select {
 			case <-ticker.C:
 				switch w.timer.status.Val() {
-				case StatusRunning:
+				case STATUS_RUNNING:
 					w.proceed()
 
-				case StatusStopped:
-					// Do nothing.
-
-				case StatusClosed:
+				case STATUS_STOPPED:
+				case STATUS_CLOSED:
 					ticker.Stop()
 					return
 				}
@@ -61,14 +59,14 @@ func (w *wheel) proceed() {
 					go func(entry *Entry) {
 						defer func() {
 							if err := recover(); err != nil {
-								if err != panicExit {
+								if err != gPANIC_EXIT {
 									panic(err)
 								} else {
 									entry.Close()
 								}
 							}
-							if entry.Status() == StatusRunning {
-								entry.SetStatus(StatusReady)
+							if entry.Status() == STATUS_RUNNING {
+								entry.SetStatus(STATUS_READY)
 							}
 						}()
 						entry.job()
@@ -76,9 +74,9 @@ func (w *wheel) proceed() {
 				}
 				// If rolls on the job.
 				if addable {
-					//If StatusReset , reset to runnable state.
-					if entry.Status() == StatusReset {
-						entry.SetStatus(StatusReady)
+					//If STATUS_RESET , reset to runnable state.
+					if entry.Status() == STATUS_RESET {
+						entry.SetStatus(STATUS_READY)
 					}
 					entry.wheel.timer.doAddEntryByParent(entry.rawIntervalMs, entry)
 				}

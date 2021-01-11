@@ -63,9 +63,3 @@ func Test_ReadCloser(t *testing.T) {
 		t.Assert(r, []byte{1, 2, 3, 4})
 	})
 }
-
-func Test_RemoveSymbols(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		t.Assert(utils.RemoveSymbols(`-a-b._a c1!@#$%^&*()_+:";'.,'01`), `abac101`)
-	})
-}

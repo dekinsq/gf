@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -162,7 +162,7 @@ func TestTimer_DelayAddEntry(t *testing.T) {
 		array := garray.New(true)
 		timer.DelayAddEntry(200*time.Millisecond, 200*time.Millisecond, func() {
 			array.Append(1)
-		}, false, 100, gtimer.StatusReady)
+		}, false, 100, gtimer.STATUS_READY)
 		time.Sleep(250 * time.Millisecond)
 		t.Assert(array.Len(), 0)
 		time.Sleep(250 * time.Millisecond)

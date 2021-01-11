@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://github.com/gogf/gf). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -8,7 +8,7 @@ package gdb
 
 import (
 	"database/sql"
-	"github.com/gogf/gf/errors/gerror"
+	"errors"
 	"github.com/gogf/gf/os/gtime"
 	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
@@ -25,8 +25,6 @@ func (m *Model) Batch(batch int) *Model {
 
 // Data sets the operation data for the model.
 // The parameter <data> can be type of string/map/gmap/slice/struct/*struct, etc.
-// Note that, it uses shallow value copying for `data` if `data` is type of map/slice
-// to avoid changing it inside function.
 // Eg:
 // Data("uid=10000")
 // Data("uid", 10000)
@@ -36,7 +34,8 @@ func (m *Model) Batch(batch int) *Model {
 func (m *Model) Data(data ...interface{}) *Model {
 	model := m.getModel()
 	if len(data) > 1 {
-		if s := gconv.String(data[0]); gstr.Contains(s, "?") {
+		s := gconv.String(data[0])
+		if gstr.Contains(s, "?") {
 			model.data = s
 			model.extraArgs = data[1:]
 		} else {
@@ -53,13 +52,9 @@ func (m *Model) Data(data ...interface{}) *Model {
 		case Record:
 			model.data = params.Map()
 		case List:
-			list := make(List, len(params))
-			for k, v := range params {
-				list[k] = gutil.MapCopy(v)
-			}
-			model.data = list
+			model.data = params
 		case Map:
-			model.data = gutil.MapCopy(params)
+			model.data = params
 		default:
 			var (
 				rv   = reflect.ValueOf(params)
@@ -106,7 +101,7 @@ func (m *Model) Insert(data ...interface{}) (result sql.Result, err error) {
 	if len(data) > 0 {
 		return m.Data(data...).Insert()
 	}
-	return m.doInsertWithOption(insertOptionDefault)
+	return m.doInsertWithOption(gINSERT_OPTION_DEFAULT, data...)
 }
 
 // InsertIgnore does "INSERT IGNORE INTO ..." statement for the model.
@@ -114,9 +109,9 @@ func (m *Model) Insert(data ...interface{}) (result sql.Result, err error) {
 // see Model.Data.
 func (m *Model) InsertIgnore(data ...interface{}) (result sql.Result, err error) {
 	if len(data) > 0 {
-		return m.Data(data...).InsertIgnore()
+		return m.Data(data...).Insert()
 	}
-	return m.doInsertWithOption(insertOptionIgnore)
+	return m.doInsertWithOption(gINSERT_OPTION_IGNORE, data...)
 }
 
 // Replace does "REPLACE INTO ..." statement for the model.
@@ -126,7 +121,7 @@ func (m *Model) Replace(data ...interface{}) (result sql.Result, err error) {
 	if len(data) > 0 {
 		return m.Data(data...).Replace()
 	}
-	return m.doInsertWithOption(insertOptionReplace)
+	return m.doInsertWithOption(gINSERT_OPTION_REPLACE, data...)
 }
 
 // Save does "INSERT INTO ... ON DUPLICATE KEY UPDATE..." statement for the model.
@@ -139,18 +134,18 @@ func (m *Model) Save(data ...interface{}) (result sql.Result, err error) {
 	if len(data) > 0 {
 		return m.Data(data...).Save()
 	}
-	return m.doInsertWithOption(insertOptionSave)
+	return m.doInsertWithOption(gINSERT_OPTION_SAVE, data...)
 }
 
 // doInsertWithOption inserts data with option parameter.
-func (m *Model) doInsertWithOption(option int) (result sql.Result, err error) {
+func (m *Model) doInsertWithOption(option int, data ...interface{}) (result sql.Result, err error) {
 	defer func() {
 		if err == nil {
 			m.checkAndRemoveCache()
 		}
 	}()
 	if m.data == nil {
-		return nil, gerror.New("inserting into table with empty data")
+		return nil, errors.New("inserting into table with empty data")
 	}
 	var (
 		nowString       = gtime.Now().String()
@@ -160,7 +155,7 @@ func (m *Model) doInsertWithOption(option int) (result sql.Result, err error) {
 	)
 	// Batch operation.
 	if list, ok := m.data.(List); ok {
-		batch := defaultBatchNumber
+		batch := gDEFAULT_BATCH_NUM
 		if m.batch > 0 {
 			batch = m.batch
 		}
@@ -212,5 +207,5 @@ func (m *Model) doInsertWithOption(option int) (result sql.Result, err error) {
 			option,
 		)
 	}
-	return nil, gerror.New("inserting into table with invalid data type")
+	return nil, errors.New("inserting into table with invalid data type")
 }

@@ -18,9 +18,12 @@ import (
 // if <rules> is type of []string.
 // The optional parameter <messages> specifies the custom error messages for specified keys and rules.
 func CheckMap(params interface{}, rules interface{}, messages ...CustomMsg) *Error {
-	// If there's no validation rules, it does nothing and returns quickly.
-	if params == nil || rules == nil {
-		return nil
+	data := gconv.Map(params)
+	if data == nil {
+		return newErrorStr(
+			"invalid_params",
+			"invalid params type: convert to map failed",
+		)
 	}
 	var (
 		checkRules = make(map[string]string)
@@ -65,17 +68,6 @@ func CheckMap(params interface{}, rules interface{}, messages ...CustomMsg) *Err
 	// No sequence rules: map[field]rule
 	case map[string]string:
 		checkRules = v
-	}
-	// If there's no validation rules, it does nothing and returns quickly.
-	if len(checkRules) == 0 {
-		return nil
-	}
-	data := gconv.Map(params)
-	if data == nil {
-		return newErrorStr(
-			"invalid_params",
-			"invalid params type: convert to map failed",
-		)
 	}
 	if len(messages) > 0 && len(messages[0]) > 0 {
 		if len(customMsgs) > 0 {

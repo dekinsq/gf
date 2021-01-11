@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -10,7 +10,6 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/gogf/gf/internal/intlog"
-	"github.com/gogf/gf/os/gres"
 	"github.com/gogf/gf/util/gutil"
 	"net/http"
 	"strconv"
@@ -171,21 +170,40 @@ type ServerConfig struct {
 	// ==================================
 	// Logging.
 	// ==================================
-	Logger           *glog.Logger // Logger specifies the logger for server.
-	LogPath          string       // LogPath specifies the directory for storing logging files.
-	LogLevel         string       // LogLevel specifies the logging level for logger.
-	LogStdout        bool         // LogStdout specifies whether printing logging content to stdout.
-	ErrorStack       bool         // ErrorStack specifies whether logging stack information when error.
-	ErrorLogEnabled  bool         // ErrorLogEnabled enables error logging content to files.
-	ErrorLogPattern  string       // ErrorLogPattern specifies the error log file pattern like: error-{Ymd}.log
-	AccessLogEnabled bool         // AccessLogEnabled enables access logging content to files.
-	AccessLogPattern string       // AccessLogPattern specifies the error log file pattern like: access-{Ymd}.log
+
+	// Logger specifies the logger for server.
+	Logger *glog.Logger
+
+	// LogPath specifies the directory for storing logging files.
+	LogPath string
+
+	// LogStdout specifies whether printing logging content to stdout.
+	LogStdout bool
+
+	// ErrorStack specifies whether logging stack information when error.
+	ErrorStack bool
+
+	// ErrorLogEnabled enables error logging content to files.
+	ErrorLogEnabled bool
+
+	// ErrorLogPattern specifies the error log file pattern like: error-{Ymd}.log
+	ErrorLogPattern string
+
+	// AccessLogEnabled enables access logging content to files.
+	AccessLogEnabled bool
+
+	// AccessLogPattern specifies the error log file pattern like: access-{Ymd}.log
+	AccessLogPattern string
 
 	// ==================================
 	// PProf.
 	// ==================================
-	PProfEnabled bool   // PProfEnabled enables PProf feature.
-	PProfPattern string // PProfPattern specifies the PProf service pattern for router.
+
+	// PProfEnabled enables PProf feature.
+	PProfEnabled bool
+
+	// PProfPattern specifies the PProf service pattern for router.
+	PProfPattern string
 
 	// ==================================
 	// Other.
@@ -248,7 +266,6 @@ func NewConfig() ServerConfig {
 		SessionPath:         gsession.DefaultStorageFilePath,
 		SessionCookieOutput: true,
 		Logger:              glog.New(),
-		LogLevel:            "all",
 		LogStdout:           true,
 		ErrorStack:          true,
 		ErrorLogEnabled:     true,
@@ -291,7 +308,6 @@ func (s *Server) SetConfigWithMap(m map[string]interface{}) error {
 		m[k] = gfile.StrToSize(gconv.String(v))
 	}
 	// Update the current configuration object.
-	// It only updates the configured keys not all the object.
 	if err := gconv.Struct(m, &s.config); err != nil {
 		return err
 	}
@@ -316,14 +332,6 @@ func (s *Server) SetConfig(c ServerConfig) error {
 	if c.TLSConfig == nil && c.HTTPSCertPath != "" {
 		s.EnableHTTPS(c.HTTPSCertPath, c.HTTPSKeyPath)
 	}
-	// Logging.
-	if s.config.LogPath != "" && s.config.LogPath != s.config.Logger.GetPath() {
-		if err := s.config.Logger.SetPath(s.config.LogPath); err != nil {
-			return err
-		}
-	}
-	s.config.Logger.SetLevelStr(s.config.LogLevel)
-
 	SetGraceful(c.Graceful)
 	intlog.Printf("SetConfig: %+v", s.config)
 	return nil
@@ -378,12 +386,8 @@ func (s *Server) EnableHTTPS(certFile, keyFile string, tlsConfig ...*tls.Config)
 			certFileRealPath = gfile.RealPath(gfile.MainPkgPath() + gfile.Separator + certFile)
 		}
 	}
-	// Resource.
-	if certFileRealPath == "" && gres.Contains(certFile) {
-		certFileRealPath = certFile
-	}
 	if certFileRealPath == "" {
-		s.Logger().Fatal(fmt.Sprintf(`EnableHTTPS failed: certFile "%s" does not exist`, certFile))
+		s.Logger().Fatal(fmt.Sprintf(`[ghttp] EnableHTTPS failed: certFile "%s" does not exist`, certFile))
 	}
 	keyFileRealPath := gfile.RealPath(keyFile)
 	if keyFileRealPath == "" {
@@ -392,12 +396,8 @@ func (s *Server) EnableHTTPS(certFile, keyFile string, tlsConfig ...*tls.Config)
 			keyFileRealPath = gfile.RealPath(gfile.MainPkgPath() + gfile.Separator + keyFile)
 		}
 	}
-	// Resource.
-	if keyFileRealPath == "" && gres.Contains(keyFile) {
-		keyFileRealPath = keyFile
-	}
 	if keyFileRealPath == "" {
-		s.Logger().Fatal(fmt.Sprintf(`EnableHTTPS failed: keyFile "%s" does not exist`, keyFile))
+		s.Logger().Fatal(fmt.Sprintf(`[ghttp] EnableHTTPS failed: keyFile "%s" does not exist`, keyFile))
 	}
 	s.config.HTTPSCertPath = certFileRealPath
 	s.config.HTTPSKeyPath = keyFileRealPath

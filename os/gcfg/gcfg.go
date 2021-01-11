@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -11,7 +11,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/os/gcmd"
 	"github.com/gogf/gf/text/gstr"
 
 	"github.com/gogf/gf/os/gres"
@@ -19,6 +18,7 @@ import (
 	"github.com/gogf/gf/container/garray"
 	"github.com/gogf/gf/container/gmap"
 	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/internal/cmdenv"
 	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/os/gfsnotify"
 	"github.com/gogf/gf/os/glog"
@@ -26,8 +26,8 @@ import (
 )
 
 const (
-	DefaultConfigFile = "config.toml" // The default configuration file name.
-	cmdEnvKey         = "gf.gcfg"     // Configuration key for command argument or environment.
+	DEFAULT_CONFIG_FILE = "config.toml" // The default configuration file name.
+	gCMDENV_KEY         = "gf.gcfg"     // Configuration key for command argument or environment.
 )
 
 // Configuration struct.
@@ -39,21 +39,15 @@ type Config struct {
 }
 
 var (
-	supportedFileTypes = []string{"toml", "yaml", "json", "ini", "xml"}
-	resourceTryFiles   = []string{"", "/", "config/", "config", "/config", "/config/"}
+	resourceTryFiles = []string{"", "/", "config/", "config", "/config", "/config/"}
 )
 
 // New returns a new configuration management object.
 // The parameter <file> specifies the default configuration file name for reading.
 func New(file ...string) *Config {
-	name := DefaultConfigFile
+	name := DEFAULT_CONFIG_FILE
 	if len(file) > 0 {
 		name = file[0]
-	} else {
-		// Custom default configuration file name from command line or environment.
-		if customFile := gcmd.GetWithEnv(fmt.Sprintf("%s.file", cmdEnvKey)).String(); customFile != "" {
-			name = customFile
-		}
 	}
 	c := &Config{
 		name:  name,
@@ -61,12 +55,12 @@ func New(file ...string) *Config {
 		jsons: gmap.NewStrAnyMap(true),
 	}
 	// Customized dir path from env/cmd.
-	if customPath := gcmd.GetWithEnv(fmt.Sprintf("%s.path", cmdEnvKey)).String(); customPath != "" {
-		if gfile.Exists(customPath) {
-			_ = c.SetPath(customPath)
+	if envPath := cmdenv.Get(fmt.Sprintf("%s.path", gCMDENV_KEY)).String(); envPath != "" {
+		if gfile.Exists(envPath) {
+			_ = c.SetPath(envPath)
 		} else {
 			if errorPrint() {
-				glog.Errorf("Configuration directory path does not exist: %s", customPath)
+				glog.Errorf("Configuration directory path does not exist: %s", envPath)
 			}
 		}
 	} else {
@@ -282,10 +276,6 @@ func (c *Config) FilePath(file ...string) (path string) {
 				}
 			}
 		})
-	}
-	// Already found?
-	if path != "" {
-		return
 	}
 	// Searching the file system.
 	c.paths.RLockFunc(func(array []string) {

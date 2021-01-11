@@ -57,7 +57,7 @@ func (c *Cron) addEntry(pattern string, job func(), singleton bool, name ...stri
 	// It should start running after the entry is added to the entries map,
 	// to avoid the task from running during adding where the entries
 	// does not have the entry information, which might cause panic.
-	entry.entry = gtimer.AddEntry(time.Second, entry.check, singleton, -1, gtimer.StatusStopped)
+	entry.entry = gtimer.AddEntry(time.Second, entry.check, singleton, -1, gtimer.STATUS_STOPPED)
 	c.entries.Set(entry.Name, entry)
 	entry.entry.Start()
 	return entry, nil
@@ -112,20 +112,20 @@ func (entry *Entry) check() {
 		path := entry.cron.GetLogPath()
 		level := entry.cron.GetLogLevel()
 		switch entry.cron.status.Val() {
-		case StatusStopped:
+		case STATUS_STOPPED:
 			return
 
-		case StatusClosed:
+		case STATUS_CLOSED:
 			glog.Path(path).Level(level).Debugf("[gcron] %s(%s) %s removed", entry.Name, entry.schedule.pattern, entry.jobName)
 			entry.Close()
 
-		case StatusReady:
+		case STATUS_READY:
 			fallthrough
-		case StatusRunning:
+		case STATUS_RUNNING:
 			// Running times check.
 			times := entry.times.Add(-1)
 			if times <= 0 {
-				if entry.entry.SetStatus(StatusClosed) == StatusClosed || times < 0 {
+				if entry.entry.SetStatus(STATUS_CLOSED) == STATUS_CLOSED || times < 0 {
 					return
 				}
 			}
@@ -139,7 +139,7 @@ func (entry *Entry) check() {
 				} else {
 					glog.Path(path).Level(level).Debugf("[gcron] %s(%s) %s end", entry.Name, entry.schedule.pattern, entry.jobName)
 				}
-				if entry.entry.Status() == StatusClosed {
+				if entry.entry.Status() == STATUS_CLOSED {
 					entry.Close()
 				}
 			}()

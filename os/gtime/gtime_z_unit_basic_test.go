@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2019 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -7,7 +7,6 @@
 package gtime_test
 
 import (
-	"github.com/gogf/gf/frame/g"
 	"testing"
 	"time"
 
@@ -17,8 +16,8 @@ import (
 
 func Test_SetTimeZone(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		t.Assert(gtime.SetTimeZone("Asia/Shanghai"), nil)
-		//t.Assert(time.Local.String(), "Asia/Shanghai")
+		gtime.SetTimeZone("Asia/Shanghai")
+		t.Assert(time.Local.String(), "Asia/Shanghai")
 	})
 }
 
@@ -87,7 +86,6 @@ func Test_RFC822(t *testing.T) {
 
 func Test_StrToTime(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		// Correct datetime string.
 		var testDateTimes = []string{
 			"2006-01-02 15:04:05",
 			"2006/01/02 15:04:05",
@@ -105,11 +103,13 @@ func Test_StrToTime(t *testing.T) {
 
 		for _, item := range testDateTimes {
 			timeTemp, err := gtime.StrToTime(item)
-			t.Assert(err, nil)
+			if err != nil {
+				t.Error("test fail")
+			}
 			t.Assert(timeTemp.Time.Format("2006-01-02 15:04:05"), "2006-01-02 15:04:05")
 		}
 
-		// Correct date string,.
+		//正常日期列表，时间00:00:00
 		var testDates = []string{
 			"2006.01.02",
 			"2006.01.02 00:00",
@@ -118,25 +118,13 @@ func Test_StrToTime(t *testing.T) {
 
 		for _, item := range testDates {
 			timeTemp, err := gtime.StrToTime(item)
-			t.Assert(err, nil)
+			if err != nil {
+				t.Error("test fail")
+			}
 			t.Assert(timeTemp.Time.Format("2006-01-02 15:04:05"), "2006-01-02 00:00:00")
 		}
 
-		// Correct time string.
-		var testTimes = g.MapStrStr{
-			"16:12:01":     "15:04:05",
-			"16:12:01.789": "15:04:05.000",
-		}
-
-		for k, v := range testTimes {
-			time1, err := gtime.StrToTime(k)
-			t.Assert(err, nil)
-			time2, err := time.ParseInLocation(v, k, time.Local)
-			t.Assert(err, nil)
-			t.Assert(time1.Time, time2)
-		}
-
-		// formatToStdLayout
+		//测试格式化formatToStdLayout
 		var testDateFormats = []string{
 			"Y-m-d H:i:s",
 			"\\T\\i\\m\\e Y-m-d H:i:s",
@@ -161,7 +149,7 @@ func Test_StrToTime(t *testing.T) {
 			t.Assert(timeTemp.Time.Format("2006-01-02 15:04:05.000"), "2007-01-02 15:04:05.000")
 		}
 
-		// 异常日期列表
+		//异常日期列表
 		var testDatesFail = []string{
 			"2006.01",
 			"06..02",

@@ -6,8 +6,6 @@
 
 package gconv
 
-import "reflect"
-
 // SliceFloat is alias of Floats.
 func SliceFloat(i interface{}) []float64 {
 	return Floats(i)
@@ -35,11 +33,6 @@ func Float32s(i interface{}) []float32 {
 	}
 	var array []float32
 	switch value := i.(type) {
-	case string:
-		if value == "" {
-			return []float32{}
-		}
-		return []float32{Float32(value)}
 	case []string:
 		array = make([]float32, len(value))
 		for k, v := range value {
@@ -118,18 +111,7 @@ func Float32s(i interface{}) []float32 {
 		if v, ok := i.(apiInterfaces); ok {
 			return Float32s(v.Interfaces())
 		}
-		// Use reflect feature at last.
-		rv := reflect.ValueOf(i)
-		switch rv.Kind() {
-		case reflect.Slice, reflect.Array:
-			length := rv.Len()
-			array = make([]float32, length)
-			for n := 0; n < length; n++ {
-				array[n] = Float32(rv.Index(n).Interface())
-			}
-		default:
-			return []float32{Float32(i)}
-		}
+		return []float32{Float32(i)}
 	}
 	return array
 }
@@ -141,11 +123,6 @@ func Float64s(i interface{}) []float64 {
 	}
 	var array []float64
 	switch value := i.(type) {
-	case string:
-		if value == "" {
-			return []float64{}
-		}
-		return []float64{Float64(value)}
 	case []string:
 		array = make([]float64, len(value))
 		for k, v := range value {
@@ -224,18 +201,7 @@ func Float64s(i interface{}) []float64 {
 		if v, ok := i.(apiInterfaces); ok {
 			return Floats(v.Interfaces())
 		}
-		// Use reflect feature at last.
-		rv := reflect.ValueOf(i)
-		switch rv.Kind() {
-		case reflect.Slice, reflect.Array:
-			length := rv.Len()
-			array = make([]float64, length)
-			for n := 0; n < length; n++ {
-				array[n] = Float64(rv.Index(n).Interface())
-			}
-		default:
-			return []float64{Float64(i)}
-		}
+		return []float64{Float64(i)}
 	}
 	return array
 

@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2017 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -65,11 +65,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		} else {
 			if exception := recover(); exception != nil {
 				request.Response.WriteStatus(http.StatusInternalServerError)
-				if err, ok := exception.(error); ok {
-					s.handleErrorLog(gerror.Wrap(err, ""), request)
-				} else {
-					s.handleErrorLog(gerror.Newf("%v", exception), request)
-				}
+				s.handleErrorLog(gerror.Newf("%v", exception), request)
 			}
 		}
 		// access log handling.
@@ -109,7 +105,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// HOOK - BeforeServe
-	s.callHookHandler(HookBeforeServe, request)
+	s.callHookHandler(HOOK_BEFORE_SERVE, request)
 
 	// Core serving handling.
 	if !request.IsExited() {
@@ -137,12 +133,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// HOOK - AfterServe
 	if !request.IsExited() {
-		s.callHookHandler(HookAfterServe, request)
+		s.callHookHandler(HOOK_AFTER_SERVE, request)
 	}
 
 	// HOOK - BeforeOutput
 	if !request.IsExited() {
-		s.callHookHandler(HookBeforeOutput, request)
+		s.callHookHandler(HOOK_BEFORE_OUTPUT, request)
 	}
 
 	// HTTP status checking.
@@ -155,15 +151,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	// HTTP status handler.
 	if request.Response.Status != http.StatusOK {
-		statusFuncArray := s.getStatusHandler(request.Response.Status, request)
-		for _, f := range statusFuncArray {
+		if f := s.getStatusHandler(request.Response.Status, request); f != nil {
 			// Call custom status handler.
 			niceCallFunc(func() {
 				f(request)
 			})
-			if request.IsExited() {
-				break
-			}
 		}
 	}
 
@@ -180,7 +172,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	request.Response.Flush()
 	// HOOK - AfterOutput
 	if !request.IsExited() {
-		s.callHookHandler(HookAfterOutput, request)
+		s.callHookHandler(HOOK_AFTER_OUTPUT, request)
 	}
 }
 

@@ -1,4 +1,4 @@
-// Copyright GoFrame Author(https://goframe.org). All Rights Reserved.
+// Copyright 2018 gf Author(https://github.com/gogf/gf). All Rights Reserved.
 //
 // This Source Code Form is subject to the terms of the MIT License.
 // If a copy of the MIT was not distributed with this file,
@@ -31,29 +31,9 @@ func New(param ...interface{}) *Time {
 			return NewFromTime(r)
 		case *time.Time:
 			return NewFromTime(*r)
-		case Time:
-			return &r
-		case *Time:
-			return r
 		case string:
-			if len(param) > 1 {
-				switch t := param[1].(type) {
-				case string:
-					return NewFromStrFormat(r, t)
-				case []byte:
-					return NewFromStrFormat(r, string(t))
-				}
-			}
 			return NewFromStr(r)
 		case []byte:
-			if len(param) > 1 {
-				switch t := param[1].(type) {
-				case string:
-					return NewFromStrFormat(string(r), t)
-				case []byte:
-					return NewFromStrFormat(string(r), string(t))
-				}
-			}
 			return NewFromStr(string(r))
 		case int:
 			return NewFromTimeStamp(int64(r))
@@ -179,11 +159,6 @@ func (t *Time) TimestampNanoStr() string {
 	return strconv.FormatInt(t.TimestampNano(), 10)
 }
 
-// Month returns the month of the year specified by t.
-func (t *Time) Month() int {
-	return int(t.Time.Month())
-}
-
 // Second returns the second offset within the minute specified by t,
 // in the range [0, 59].
 func (t *Time) Second() int {
@@ -240,6 +215,22 @@ func (t *Time) AddStr(duration string) (*Time, error) {
 	}
 }
 
+// ToLocation converts current time to specified location.
+func (t *Time) ToLocation(location *time.Location) *Time {
+	newTime := t.Clone()
+	newTime.Time = newTime.Time.In(location)
+	return newTime
+}
+
+// ToZone converts current time to specified zone like: Asia/Shanghai.
+func (t *Time) ToZone(zone string) (*Time, error) {
+	if l, err := time.LoadLocation(zone); err == nil {
+		return t.ToLocation(l), nil
+	} else {
+		return nil, err
+	}
+}
+
 // UTC converts current time to UTC timezone.
 func (t *Time) UTC() *Time {
 	newTime := t.Clone()
@@ -255,6 +246,13 @@ func (t *Time) ISO8601() string {
 // RFC822 formats the time as RFC822 and returns it as string.
 func (t *Time) RFC822() string {
 	return t.Layout("Mon, 02 Jan 06 15:04 MST")
+}
+
+// Local converts the time to local timezone.
+func (t *Time) Local() *Time {
+	newTime := t.Clone()
+	newTime.Time = newTime.Time.Local()
+	return newTime
 }
 
 // AddDate adds year, month and day to the time.

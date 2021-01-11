@@ -21,14 +21,6 @@ import (
 	"github.com/gogf/gf/encoding/gbinary"
 )
 
-type (
-	// errorStack is the interface for Stack feature.
-	errorStack interface {
-		Error() string
-		Stack() string
-	}
-)
-
 var (
 	// Empty strings.
 	emptyStringMap = map[string]struct{}{

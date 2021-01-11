@@ -175,19 +175,6 @@ func Test_Func(t *testing.T) {
 		t.Assert(err, nil)
 		t.Assert(result, `ILoveGoFrame`)
 	})
-	// eq: multiple values.
-	gtest.C(t, func(t *gtest.T) {
-		str := `{{eq 1 2 1 3 4 5}}`
-		result, err := gview.ParseContent(str, nil)
-		t.Assert(err != nil, false)
-		t.Assert(result, `true`)
-	})
-	gtest.C(t, func(t *gtest.T) {
-		str := `{{eq 6 2 1 3 4 5}}`
-		result, err := gview.ParseContent(str, nil)
-		t.Assert(err != nil, false)
-		t.Assert(result, `false`)
-	})
 }
 
 func Test_FuncNl2Br(t *testing.T) {
@@ -355,73 +342,5 @@ func Test_XSS(t *testing.T) {
 		})
 		t.Assert(err, nil)
 		t.Assert(r, ghtml.Entities(s))
-	})
-}
-
-type TypeForBuildInFuncMap struct {
-	Name  string
-	Score float32
-}
-
-func (t *TypeForBuildInFuncMap) Test() (*TypeForBuildInFuncMap, error) {
-	return &TypeForBuildInFuncMap{"john", 99.9}, nil
-}
-
-func Test_BuildInFuncMap(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		v := gview.New()
-		v.Assign("v", new(TypeForBuildInFuncMap))
-		r, err := v.ParseContent("{{range $k, $v := map .v.Test}} {{$k}}:{{$v}} {{end}}")
-		t.Assert(err, nil)
-		t.Assert(gstr.Contains(r, "Name:john"), true)
-		t.Assert(gstr.Contains(r, "Score:99.9"), true)
-	})
-}
-
-type TypeForBuildInFuncMaps struct {
-	Name  string
-	Score float32
-}
-
-func (t *TypeForBuildInFuncMaps) Test() ([]*TypeForBuildInFuncMaps, error) {
-	return []*TypeForBuildInFuncMaps{
-		{"john", 99.9},
-		{"smith", 100},
-	}, nil
-}
-
-func Test_BuildInFuncMaps(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		v := gview.New()
-		v.Assign("v", new(TypeForBuildInFuncMaps))
-		r, err := v.ParseContent("{{range $k, $v := maps .v.Test}} {{$k}}:{{$v.Name}} {{$v.Score}} {{end}}")
-		t.Assert(err, nil)
-		t.Assert(r, ` 0:john 99.9  1:smith 100 `)
-	})
-}
-
-func Test_BuildInFuncDump(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		v := gview.New()
-		v.Assign("v", g.Map{
-			"name":  "john",
-			"score": 100,
-		})
-		r, err := v.ParseContent("{{dump .}}")
-		t.Assert(err, nil)
-		t.Assert(gstr.Contains(r, `"name": "john"`), true)
-		t.Assert(gstr.Contains(r, `"score": 100`), true)
-	})
-}
-
-func Test_BuildInFuncJson(t *testing.T) {
-	gtest.C(t, func(t *gtest.T) {
-		v := gview.New()
-		v.Assign("v", g.Map{
-			"name": "john",
-		})
-		r, err := v.ParseContent("{{json .v}}")
-		t.Assert(err, nil)
-		t.Assert(r, `{"name":"john"}`)
 	})
 }

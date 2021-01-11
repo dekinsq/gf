@@ -19,8 +19,8 @@ import (
 )
 
 const (
-	DefaultGroupName = "default" // Default configuration group name.
-	DefaultRedisPort = 6379      // Default redis port configuration if not passed.
+	DEFAULT_GROUP_NAME = "default" // Default configuration group name.
+	DEFAULT_REDIS_PORT = 6379      // Default redis port configuration if not passed.
 )
 
 var (
@@ -31,7 +31,7 @@ var (
 // SetConfig sets the global configuration for specified group.
 // If <name> is not passed, it sets configuration for the default group name.
 func SetConfig(config Config, name ...string) {
-	group := DefaultGroupName
+	group := DEFAULT_GROUP_NAME
 	if len(name) > 0 {
 		group = name[0]
 	}
@@ -44,7 +44,7 @@ func SetConfig(config Config, name ...string) {
 // SetConfigByStr sets the global configuration for specified group with string.
 // If <name> is not passed, it sets configuration for the default group name.
 func SetConfigByStr(str string, name ...string) error {
-	group := DefaultGroupName
+	group := DEFAULT_GROUP_NAME
 	if len(name) > 0 {
 		group = name[0]
 	}
@@ -60,7 +60,7 @@ func SetConfigByStr(str string, name ...string) error {
 // GetConfig returns the global configuration with specified group name.
 // If <name> is not passed, it returns configuration of the default group name.
 func GetConfig(name ...string) (config Config, ok bool) {
-	group := DefaultGroupName
+	group := DEFAULT_GROUP_NAME
 	if len(name) > 0 {
 		group = name[0]
 	}
@@ -73,7 +73,7 @@ func GetConfig(name ...string) (config Config, ok bool) {
 // RemoveConfig removes the global configuration with specified group.
 // If <name> is not passed, it removes configuration of the default group name.
 func RemoveConfig(name ...string) {
-	group := DefaultGroupName
+	group := DEFAULT_GROUP_NAME
 	if len(name) > 0 {
 		group = name[0]
 	}
@@ -86,7 +86,7 @@ func RemoveConfig(name ...string) {
 // ConfigFromStr parses and returns config from given str.
 // Eg: host:port[,db,pass?maxIdle=x&maxActive=x&idleTimeout=x&maxConnLifetime=x]
 func ConfigFromStr(str string) (config Config, err error) {
-	array, _ := gregex.MatchString(`([^:]+):*(\d*),{0,1}(\d*),{0,1}(.*)\?(.+?)`, str)
+	array, _ := gregex.MatchString(`([^:]+):*(\d*),{0,1}(\d*),{0,1}(.*)\?(.+)`, str)
 	if len(array) == 6 {
 		parse, _ := gstr.Parse(array[5])
 		config = Config{
@@ -96,7 +96,7 @@ func ConfigFromStr(str string) (config Config, err error) {
 			Pass: array[4],
 		}
 		if config.Port == 0 {
-			config.Port = DefaultRedisPort
+			config.Port = DEFAULT_REDIS_PORT
 		}
 		if v, ok := parse["maxIdle"]; ok {
 			config.MaxIdle = gconv.Int(v)
@@ -127,7 +127,7 @@ func ConfigFromStr(str string) (config Config, err error) {
 			Pass: array[4],
 		}
 		if config.Port == 0 {
-			config.Port = DefaultRedisPort
+			config.Port = DEFAULT_REDIS_PORT
 		}
 	} else {
 		err = gerror.Newf(`invalid redis configuration: "%s"`, str)

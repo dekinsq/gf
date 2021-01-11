@@ -14,13 +14,12 @@ import (
 
 // Structs converts any slice to given struct slice.
 func Structs(params interface{}, pointer interface{}, mapping ...map[string]string) (err error) {
-	return doStructs(params, pointer, mapping...)
+	return doStructs(params, pointer, false, mapping...)
 }
 
 // StructsDeep converts any slice to given struct slice recursively.
-// Deprecated, use Structs instead.
 func StructsDeep(params interface{}, pointer interface{}, mapping ...map[string]string) (err error) {
-	return doStructs(params, pointer, mapping...)
+	return doStructs(params, pointer, true, mapping...)
 }
 
 // doStructs converts any slice to given struct slice.
@@ -30,7 +29,7 @@ func StructsDeep(params interface{}, pointer interface{}, mapping ...map[string]
 // The parameter <pointer> should be type of pointer to slice of struct.
 // Note that if <pointer> is a pointer to another pointer of type of slice of struct,
 // it will create the struct/pointer internally.
-func doStructs(params interface{}, pointer interface{}, mapping ...map[string]string) (err error) {
+func doStructs(params interface{}, pointer interface{}, deep bool, mapping ...map[string]string) (err error) {
 	if params == nil {
 		// If <params> is nil, no conversion.
 		return nil
@@ -38,42 +37,21 @@ func doStructs(params interface{}, pointer interface{}, mapping ...map[string]st
 	if pointer == nil {
 		return gerror.New("object pointer cannot be nil")
 	}
-
-	if doStructsByDirectReflectSet(params, pointer) {
-		return nil
-	}
-
 	defer func() {
 		// Catch the panic, especially the reflect operation panics.
-		if exception := recover(); exception != nil {
-			if e, ok := exception.(errorStack); ok {
-				err = e
-			} else {
-				err = gerror.NewSkipf(1, "%v", exception)
-			}
+		if e := recover(); e != nil {
+			err = gerror.NewfSkip(1, "%v", e)
 		}
 	}()
 	// If given <params> is JSON, it then uses json.Unmarshal doing the converting.
 	switch r := params.(type) {
 	case []byte:
 		if json.Valid(r) {
-			if rv, ok := pointer.(reflect.Value); ok {
-				if rv.Kind() == reflect.Ptr {
-					return json.Unmarshal(r, rv.Interface())
-				}
-			} else {
-				return json.Unmarshal(r, pointer)
-			}
+			return json.Unmarshal(r, pointer)
 		}
 	case string:
 		if paramsBytes := []byte(r); json.Valid(paramsBytes) {
-			if rv, ok := pointer.(reflect.Value); ok {
-				if rv.Kind() == reflect.Ptr {
-					return json.Unmarshal(paramsBytes, rv.Interface())
-				}
-			} else {
-				return json.Unmarshal(paramsBytes, pointer)
-			}
+			return json.Unmarshal(paramsBytes, pointer)
 		}
 	}
 	// Pointer type check.
@@ -98,33 +76,32 @@ func doStructs(params interface{}, pointer interface{}, mapping ...map[string]st
 		if itemType.Kind() == reflect.Ptr {
 			// Slice element is type pointer.
 			e := reflect.New(itemType.Elem()).Elem()
-			if err = Struct(paramsMaps[i], e, mapping...); err != nil {
-				return err
+			if deep {
+				if err = StructDeep(paramsMaps[i], e, mapping...); err != nil {
+					return err
+				}
+			} else {
+				if err = Struct(paramsMaps[i], e, mapping...); err != nil {
+					return err
+				}
 			}
 			array.Index(i).Set(e.Addr())
 		} else {
 			// Slice element is not type of pointer.
 			e := reflect.New(itemType).Elem()
-			if err = Struct(paramsMaps[i], e, mapping...); err != nil {
-				return err
+			if deep {
+				if err = StructDeep(paramsMaps[i], e, mapping...); err != nil {
+					return err
+				}
+			} else {
+				if err = Struct(paramsMaps[i], e, mapping...); err != nil {
+					return err
+				}
 			}
 			array.Index(i).Set(e)
 		}
 	}
 	pointerRv.Elem().Set(array)
 	return nil
-}
 
-// doStructsByDirectReflectSet do the converting directly using reflect Set.
-// It returns true if success, or else false.
-func doStructsByDirectReflectSet(params interface{}, pointer interface{}) (ok bool) {
-	v1 := reflect.ValueOf(pointer)
-	v2 := reflect.ValueOf(params)
-	if v1.Kind() == reflect.Ptr {
-		if elem := v1.Elem(); elem.IsValid() && elem.Type() == v2.Type() {
-			elem.Set(v2)
-			ok = true
-		}
-	}
-	return ok
 }

@@ -7,7 +7,7 @@
 package gview
 
 import (
-	"github.com/gogf/gf/os/gcmd"
+	"github.com/gogf/gf/internal/cmdenv"
 )
 
 const (
@@ -18,5 +18,5 @@ const (
 
 // errorPrint checks whether printing error to stdout.
 func errorPrint() bool {
-	return gcmd.GetWithEnv(gERROR_PRINT_KEY, true).Bool()
+	return cmdenv.Get(gERROR_PRINT_KEY, true).Bool()
 }
